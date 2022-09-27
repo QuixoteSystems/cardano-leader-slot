@@ -2,7 +2,7 @@
 Scheduled Block Checker for Cardano Stakepool Operators.
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
-No cardano-node Required, data is taken from blockfrost.io and armada-alliance.com
+No cardano-node required, data is taken from blockfrost.io and armada-alliance.com
 
 Note: This is a reworking of old python script ScheduledBlocks.py 
 available on https://github.com/papacarp/pooltool.io.git and Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks
@@ -14,7 +14,7 @@ available on https://github.com/papacarp/pooltool.io.git and Ouroboros TPraos ve
 - libsodium library
 
 ## Setup:
-- clone this repository using git: ``` git clone https://github.com/asnakep/ScheduledBlocks.git ```
+- clone this repository using git: ``` [git clone https://github.com/QuixoteSystems/cardano-leader-slot.git] ```
 - execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
 - get a project id on blockfrost.io
 - make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
