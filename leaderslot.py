@@ -27,12 +27,11 @@ def ClearScreen():
 local_tz = pytz.timezone('Europe/Berlin')
 
 ### Set These Variables ###
-BlockFrostId = ""
-PoolId = ""
-PoolTicker = ""
-VrfKeyFile = ('<path_to>/vrf.skey')
+BlockFrostId = "YOUR_IP"
+PoolId = "YOUR_POOL_ID_HEX"
+PoolTicker = "YOUR_POOL_TICKER"
+VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 ### -------------------------------------------------------------- ###
-
 
 ### ADA Unicode symbol and Lovelaces removal ###
 ada = " \u20B3"
@@ -40,22 +39,26 @@ lovelaces = 1000000
 
 ### Get Current Epoch from Armada Alliance ###
 headers_armada ={'content-type': 'application/json'}
-CepochParam = requests.get("https://nonce.armada-alliance.io/current", headers=headers_armada)
-json_data = CepochParam.json()
-Cepoch = CepochParam.json().get("epoch")
+
+# Comment because Armada nonce is not working still
+#CepochParam = requests.get("https://nonce.armada-alliance.io/current", headers=headers_armada)
+#json_data = CepochParam.json()
+#Cepoch = CepochParam.json().get("epoch")
 
 ### Get Next Epoch Nonce from Armada Alliance ###
-NepochParam = requests.get("https://nonce.armada-alliance.io/next", headers=headers_armada)
-json_data = NepochParam.json()
-Nepoch = NepochParam.json().get("epoch")
-Neta0 = NepochParam.json().get("nonce")
+try:
+    NepochParam = requests.get("https://nonce.armada-alliance.io/next", headers=headers_armada)
+    json_data = NepochParam.json()
+    Nepoch = NepochParam.json().get("epoch")
+    Neta0 = NepochParam.json().get("nonce")
+    ErrorMsg = "Query returned no rows"
+    if ErrorMsg in Neta0 :
+        msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
+    if ErrorMsg not in Neta0 :
+        msg = str(col.green + f'(Next Epoch Nonce Available)')
 
-ErrorMsg = "Query returned no rows"
-if ErrorMsg in Neta0 :
- msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
-
-if ErrorMsg not in Neta0 :
- msg = str(col.green + f'(Next Epoch Nonce Available)')
+except OSError as ErrorMsg:
+    msg = str(col.red + f'(Failed to establish connection to nonce.armada-alliance.io)')
 
 
 ### User Prompt for specific prev/curr Epochs
@@ -64,7 +67,8 @@ print(col.green + f'Welcome to ScheduledBlocks for Cardano SPOs. ')
 print()
 print(col.green + f'Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
 print(col.endcl)
-print(col.green + f'Current Epoch: ' + col.endcl +str(Cepoch))
+#print(col.green + f'Current Epoch: ' + col.endcl +str(Cepoch))
+
 print(col.endcl)
 print(f'(n) to Check Next Epoch Schedules ' +str(msg))
 print(col.endcl)
@@ -267,55 +271,68 @@ from decimal import *
 getcontext().prec = 9
 getcontext().rounding = ROUND_HALF_UP
 
-def mkSeed(slot,eta0):
-
+def mkSeed(slot, eta0):
     h = hashlib.blake2b(digest_size=32)
-    h.update(bytearray([0,0,0,0,0,0,0,1])) #neutral nonce
-    seedLbytes=h.digest()
-
-    h = hashlib.blake2b(digest_size=32)
-    h.update(slot.to_bytes(8,byteorder='big') + binascii.unhexlify(eta0))
+    h.update(slot.to_bytes(8, byteorder='big') + binascii.unhexlify(eta0))
     slotToSeedBytes = h.digest()
 
-    seed = [x ^ slotToSeedBytes[i] for i,x in enumerate(seedLbytes)]
+    return slotToSeedBytes
 
-    return bytes(seed)
 
-def vrfEvalCertified(seed, tpraosCanBeLeaderSignKeyVRF):
-    if isinstance(seed, bytes) and isinstance(tpraosCanBeLeaderSignKeyVRF, bytes):
-        proof = create_string_buffer(libsodium.crypto_vrf_ietfdraft03_proofbytes())
-
-        libsodium.crypto_vrf_prove(proof, tpraosCanBeLeaderSignKeyVRF,seed, len(seed))
-
+def vrfEvalCertified(seed, praosCanBeLeaderSignKeyVRF):
+    if isinstance(seed, bytes) and isinstance(praosCanBeLeaderSignKeyVRF,
+                                              bytes):
+        proof = create_string_buffer(
+            libsodium.crypto_vrf_ietfdraft03_proofbytes())
+        libsodium.crypto_vrf_prove(proof, praosCanBeLeaderSignKeyVRF, seed,
+                                   len(seed))
         proofHash = create_string_buffer(libsodium.crypto_vrf_outputbytes())
-
-        libsodium.crypto_vrf_proof_to_hash(proofHash,proof)
+        libsodium.crypto_vrf_proof_to_hash(proofHash, proof)
 
         return proofHash.raw
-
     else:
         print("error.  Feed me bytes")
         exit()
 
+
+def vrfLeaderValue(vrfCert):
+    h = hashlib.blake2b(digest_size=32)
+    h.update(str.encode("L"))
+    h.update(vrfCert)
+    vrfLeaderValueBytes = h.digest()
+
+    return int.from_bytes(vrfLeaderValueBytes, byteorder="big", signed=False)
+
+
+def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
+    diff_slot = float(currentSlot - firstSlotOfEpoch)
+    left = Decimal(diff_slot) * Decimal(decentralizationParam)
+    right = Decimal(diff_slot + 1) * Decimal(decentralizationParam)
+    if math.ceil(left) < math.ceil(right):
+        return True
+    return False
+
+
 # Determine if our pool is a slot leader for this given slot
 # @param slot The slot to check
-# @param activeSlotCoeff The activeSlotsCoeff value from protocol params
+# @param activeSlotsCoeff The activeSlotsCoeff value from protocol params
 # @param sigma The controlled stake proportion for the pool
 # @param eta0 The epoch nonce value
 # @param poolVrfSkey The vrf signing key for the pool
 
-def isSlotLeader(slot,activeSlotCoeff,sigma,eta0,poolVrfSkey):
-    seed = mkSeed(slot, eta0)
-    tpraosCanBeLeaderSignKeyVRFb = binascii.unhexlify(poolVrfSkey)
-    cert=vrfEvalCertified(seed,tpraosCanBeLeaderSignKeyVRFb)
-    certNat  = int.from_bytes(cert, byteorder="big", signed=False)
-    certNatMax = math.pow(2,512)
-    denominator = certNatMax - certNat
-    q = certNatMax / denominator
-    c = math.log(1.0 - activeSlotCoeff)
-    sigmaOfF = math.exp(-sigma * c)
-    return q <= sigmaOfF
 
+def isSlotLeader(slot, activeSlotsCoeff, sigma, eta0, poolVrfSkey):
+    seed = mkSeed(slot, eta0)
+    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(poolVrfSkey)
+    cert = vrfEvalCertified(seed, praosCanBeLeaderSignKeyVRFb)
+    certLeaderVrf = vrfLeaderValue(cert)
+    certNatMax = math.pow(2, 256)
+    denominator = certNatMax - certLeaderVrf
+    q = certNatMax / denominator
+    c = math.log(1.0 - activeSlotsCoeff)
+    sigmaOfF = math.exp(-sigma * c)
+
+    return q <= sigmaOfF
 
 slotcount=0
 
@@ -323,12 +340,22 @@ for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
 
     slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, poolVrfSkey)
 
+    seed = mkSeed(slot, eta0)
+    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(poolVrfSkey)
+    cert = vrfEvalCertified(seed,praosCanBeLeaderSignKeyVRFb)
+    certLeaderVrf = vrfLeaderValue(cert)
+    certNatMax = math.pow(2,256)
+    denominator = certNatMax - certLeaderVrf
+    q = certNatMax / denominator
+    c = math.log(1.0 - activeSlotCoeff)
+    sigmaOfF = math.exp(-sigma * c)
+
     if slotLeader:
         pass
         timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
         slotcount+=1
 
-        print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch)))
+        print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
 
 print()
 print("Total Scheduled Blocks: " + str(slotcount))
