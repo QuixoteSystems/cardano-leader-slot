@@ -5,7 +5,7 @@ Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous
 No cardano-node required, data is taken from blockfrost.io and armada-alliance.com
 
 Note: This is a reworking of old python script ScheduledBlocks.py 
-available on https://github.com/papacarp/pooltool.io.git and Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks
+available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks and using Ouroboros Praos updated code from https://github.com/dostrelith678/cardano-leader-logs
 
 
 ## Prerequisites:
