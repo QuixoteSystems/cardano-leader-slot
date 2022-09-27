@@ -1,11 +1,11 @@
-# ScheduledBlocks
-Scheduled Block Checker for Cardano Stakepool Operators
+# Cardano Leader Slot
+Scheduled Block Checker for Cardano Stakepool Operators.
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
 No cardano-node Required, data is taken from blockfrost.io and armada-alliance.com
 
-Note: This is a reworking of old python script leaderLogs.py 
-available on https://github.com/papacarp/pooltool.io.git
+Note: This is a reworking of old python script ScheduledBlocks.py 
+available on https://github.com/papacarp/pooltool.io.git and Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks
 
 
 ## Prerequisites:
@@ -19,7 +19,7 @@ available on https://github.com/papacarp/pooltool.io.git
 - get a project id on blockfrost.io
 - make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
-- Set Variables on lines 23, 27-30 of ScheduledBlocks.py:
+- Set Variables on lines 23, 27-30 of leaderslot.py:
 
 ### Set your own timezone -----------------------------------------###
 local_tz = pytz.timezone('')
