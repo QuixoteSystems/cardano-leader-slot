@@ -19,8 +19,8 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 - get a project id on blockfrost.io
 - make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
-- Set Variables on lines 23, 27-30 of leaderslot.py:
-
+- Set Variables on lines 26-304 of leaderslot.py:
+```
 ### Set your own timezone -----------------------------------------###
 
 local_tz = pytz.timezone('')
@@ -36,7 +36,7 @@ PoolTicker = "YOUR_POOL_TICKER"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 
 ### -------------------------------------------------------------- ###
-
+```
 
 ## Usage:
 ``` python3 leaderslot.py ```
