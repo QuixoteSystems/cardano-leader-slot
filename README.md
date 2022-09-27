@@ -33,7 +33,7 @@ VrfKeyFile = ('')
 
 
 ## Usage:
-``` python3 ScheduledBlocks.py ```
+``` python3 leaderslot.py ```
 
 ## Output: 
 - a *console output* with all the slots assigned for next, current and previous Epochs
