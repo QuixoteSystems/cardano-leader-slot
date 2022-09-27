@@ -25,10 +25,10 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 local_tz = pytz.timezone('')
 
 ### Set These Variables ###
-BlockFrostId = ""
-PoolId = ""
-PoolTicker = ""
-VrfKeyFile = ('')
+BlockFrostId = " "
+PoolId = " "
+PoolTicker = " "
+VrfKeyFile = (' ')
 ### -------------------------------------------------------------- ###
 
 
