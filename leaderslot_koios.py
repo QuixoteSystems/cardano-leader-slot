@@ -28,9 +28,9 @@ def ClearScreen():
 local_tz = pytz.timezone('Europe/Berlin')
 
 ### Set These Variables ###
-PoolTicker = "QXT"
+PoolTicker = "YOUT_POOL_TICKER"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
-pool_id_bech32 = "pool1x5dfpgp987e4jhxvgczr3wv50nv2pwd873tlx3uthvcasm422q6"
+pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ### -------------------------------------------------------------- ###
 
