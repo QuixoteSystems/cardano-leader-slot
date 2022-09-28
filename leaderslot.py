@@ -197,18 +197,18 @@ if(key == 'c'):
     json_data = netStakeParam.json()
     nStake = int(netStakeParam.json().get("active_stake")) / lovelaces
     nStake = "{:,}".format(nStake)
-    print("Net Stake: "+nStake)
+    
 
     poolStakeParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId, headers=headers)
     json_data = poolStakeParam.json()
     pStake = int(poolStakeParam.json().get("active_stake")) / lovelaces
     pStake = "{:,}".format(pStake)
-    print("Net Stake: "+pStake)
+ 
 
     poolSigma = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId, headers=headers)
     json_data = poolSigma.json()
     sigma = poolSigma.json().get("active_size")
-    print("Net Stake: "+sigma)
+
 
     print()
     print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
