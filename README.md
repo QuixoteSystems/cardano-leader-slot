@@ -1,7 +1,7 @@
 # Cardano Leader Slot
 Scheduled Block Checker for Cardano Stakepool Operators. 
 
-*Warning: At the moment these scriptis are just working for the currents epochs.*
+*Warning: At the moment these scripts are just working for the currents epochs.*
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
 No cardano-node required, data is taken from blockfrost.io and armada-alliance.com
