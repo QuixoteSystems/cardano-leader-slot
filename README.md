@@ -17,21 +17,21 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 
 ## Setup:
 
-# Koios API version:
+### Koios API version:
 - clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
 - execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
 - make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
 - Set Variables on lines 31-33 of leaderslot_blockfrost.py:
 
-```
+~~~
 PoolTicker = "YOUT_POOL_TICKER"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
-```
+~~~
 
 
-# Blockfrost API version (It will be remove from this project):
+### Blockfrost API version (It will be remove from this project):
 - clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
 - execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
 - get a project id on blockfrost.io
@@ -58,7 +58,11 @@ VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 
 
 ## Usage:
-``` python3 leaderslot.py ```
+Koios version:
+``` python3 leaderslot_koios.py ```
+
+Blockfrost version:
+``` python3 leaderslot_blockfrost.py ```
 
 ## Output: 
 - a *console output* with all the slots assigned for next, current and previous Epochs
