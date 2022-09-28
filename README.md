@@ -22,12 +22,18 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 - execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
 - make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
-- Set Variables on lines 31-33 of leaderslot_blockfrost.py:
+- Set Variables on lines 27-35 of leaderslot_blockfrost.py:
 
 ~~~
+### Set your onw timezone -----------------------------------------###
+local_tz = pytz.timezone('Europe/Berlin')
+
+### Set These Variables ###
 PoolTicker = "YOUT_POOL_TICKER"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
+
+### -------------------------------------------------------------- ###
 ~~~
 
 
@@ -38,23 +44,19 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 - make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
 - Set Variables on lines 26-34 of leaderslot_blockfrost.py:
-```
+~~~
 ### Set your own timezone -----------------------------------------###
 
 local_tz = pytz.timezone('')
 
 ### Set These Variables ###
-
 BlockFrostId = "YOUR_IP"
-
 PoolId = "YOUR_POOL_ID_HEX
-
 PoolTicker = "YOUR_POOL_TICKER"
-
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 
 ### -------------------------------------------------------------- ###
-```
+~~~
 
 
 ## Usage:
