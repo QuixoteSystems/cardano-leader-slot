@@ -187,7 +187,7 @@ firstSlot = firstShelleySlot[0]["abs_slot"]
 
 
 ### calculate first slot of target epoch ###
-firstSlotOfEpoch = float(firstSlot) + float(epoch - 211) * float(epochLength)
+firstSlotOfEpoch = (firstSlot) + (epoch - 211) * (epochLength)
 
 from decimal import *
 getcontext().prec = 9
