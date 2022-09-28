@@ -2,3 +2,4 @@ pytz
 requests
 urllib3
 readchar
+koios-python
