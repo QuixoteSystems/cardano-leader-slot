@@ -120,15 +120,12 @@ if(key == 'c'):
 
     epoch_info = kp.get_epoch_info(epoch)
     nStake = epoch_info[0]["active_stake"]
-    print("Pool Stake: "+str(nStake))
 
     poolStakeParam = kp.get_pool_info(pool_id_bech32)
     pStake = poolStakeParam[0]["active_stake"]
 
-    print("Pool Stake: "+str(pStake))
-
     sigma = float(pStake) / float(nStake)
-    print("Sigma: "+str(sigma))
+
 
     print()
     print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
@@ -179,9 +176,9 @@ libsodium.sodium_init()
 ### Blockchain Genesis Parameters ###
 GenesisParam = kp.get_genesis()
 
-epochLength = GenesisParam[0]["epochlength"]
-activeSlotCoeff = GenesisParam[0]["activeslotcoeff"]
-slotLength = GenesisParam[0]["slotlength"]
+epochLength = int(GenesisParam[0]["epochlength"])
+activeSlotCoeff = float(GenesisParam[0]["activeslotcoeff"])
+slotLength = int(GenesisParam[0]["slotlength"])
 
 ### Epoch 211 First Slot ###
 firstShelleySlot = kp.get_block_info("33a28456a44277cbfb3457082467e56f16554932eb2a9eb7ceca97740bd4f4db")
