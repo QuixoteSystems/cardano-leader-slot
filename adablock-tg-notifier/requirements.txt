@@ -1,5 +1,0 @@
-pyaml>=21.10.1
-pytz>=2021.3
-requests>=2.26.0
-SQLAlchemy>=1.4.25
-urllib3>=1.26.7
