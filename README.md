@@ -37,7 +37,8 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 ~~~
 
 
-### Blockfrost API version ###(It will be remove from this project):
+### Blockfrost API version:
+*Blockfrost version will be remove from this project*
 - Clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
 - Execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
 - Get a project id on blockfrost.io
