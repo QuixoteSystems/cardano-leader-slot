@@ -13,6 +13,7 @@ from ctypes import *
 from os import system, path
 from datetime import datetime, timezone
 from sys import exit, platform
+import koios_python as kp
 
 class col:
     red = '\033[31m'
@@ -27,11 +28,13 @@ def ClearScreen():
 local_tz = pytz.timezone('Europe/Berlin')
 
 ### Set These Variables ###
-BlockFrostId = "YOUR_IP"
-PoolId = "YOUR_POOL_ID_HEX"
-PoolTicker = "YOUR_POOL_TICKER"
+PoolTicker = "QXT"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
+pool_id_bech32 = "pool1x5dfpgp987e4jhxvgczr3wv50nv2pwd873tlx3uthvcasm422q6"
+
 ### -------------------------------------------------------------- ###
+
+
 
 ### ADA Unicode symbol and Lovelaces removal ###
 ada = " \u20B3"
@@ -88,52 +91,6 @@ if(key == 'n'):
 
     ClearScreen()
 
-    headers = {'content-type': 'application/json', 'project_id': BlockFrostId}
-    headers_armada ={'content-type': 'application/json'}
-
-    epochParam = requests.get("https://nonce.armada-alliance.io/next", headers=headers_armada)
-    json_data = epochParam.json()
-    epoch = epochParam.json().get("epoch")
-    eta0 = epochParam.json().get("nonce")
-
-    ErrorMsg = "Query returned no rows"
-
-    if ErrorMsg in eta0 :
-        print()
-        print(col.red + f'New Nonce Not Avaliable Yet for Epoch: '+ col.endcl + str(epoch))
-        exit()
-
-    if ErrorMsg not in eta0 :
-        print()
-        print(f'New Epoch Nonce: ' + col.green + str(eta0) + col.endcl)
-
-###### Blockfrost API
-    netStakeParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/epochs/"+(str(epoch-1)), headers=headers)
-    json_data = netStakeParam.json()
-    nStake = int(netStakeParam.json().get("active_stake")) / lovelaces
-    nStake = "{:,}".format(nStake)
-
-    poolStakeParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId, headers=headers)
-    json_data = poolStakeParam.json()
-    pStake = int(poolStakeParam.json().get("active_stake")) / lovelaces
-    pStake = "{:,}".format(pStake)
-
-    poolSigma = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId, headers=headers)
-    json_data = poolSigma.json()
-    sigma = poolSigma.json().get("active_size")
-
-
-    print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
-    print()
-    print(f'Pool Id: ' + (col.green + PoolId + col.endcl))
-    print()
-    print(f'Next Epoch: ' + col.green + str(epoch) + col.endcl)
-    print()
-    print(f'Network Active Stake in Epoch ' + str(epoch-1) + ": " + col.green + str(nStake) + col.endcl + ada + col.endcl)
-    print()
-    print(f'Pool Active Stake in Epoch ' + str(epoch-1) + ": " + col.green + str(pStake) + col.endcl + ada + col.endcl)
-    print()
 
 
 if(key == 'p'):
@@ -145,75 +102,38 @@ if(key == 'p'):
 
  ### Get data from blockfrost.io APIs ###
 
-    headers = {'content-type': 'application/json', 'project_id': BlockFrostId}
-
-    epochParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/epochs/"+Epoch+"/parameters", headers=headers)
-    json_data = epochParam.json()
-    epoch = epochParam.json().get("epoch")
-    eta0 = epochParam.json().get("nonce")
-
-    netStakeParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/epochs/"+Epoch, headers=headers)
-    json_data = netStakeParam.json()
-    nStake = int(netStakeParam.json().get("active_stake")) / lovelaces
-    nStake = "{:,}".format(nStake)
-
-    poolHistStake = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId+"/history?page=1", headers=headers)
-    json_data = poolHistStake.json()
-
-    for i in json_data :
-        if i['epoch'] == int(Epoch) :
-            sigma = (i["active_size"])
-            pStake = (i["active_stake"])
-            pStake = int(pStake) / lovelaces
-            pStake = "{:,}".format(pStake)
-
-
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
-    print()
-    print(f'Pool Id: ' + (col.green + PoolId + col.endcl))
-    print()
-    print(f'Epoch: ' + col.green + Epoch + col.endcl)
-    print()
-    print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
-    print()
-    print(f'Network Active Stake in Epoch ' + Epoch + ": " + col.green + str(nStake) + col.endcl + ada + col.endcl)
-    print()
-    print(f'Pool Active Stake in Epoch ' + Epoch + ": " + col.green + str(pStake) + col.endcl + ada + col.endcl)
-    print()
+   
 
 
 if(key == 'c'):
 
     ClearScreen()
-#### BLOCKFROST API
-    headers = {'content-type': 'application/json', 'project_id': BlockFrostId}
 
-    epochParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/epochs/latest/parameters", headers=headers)
-    json_data = epochParam.json()
-    epoch = epochParam.json().get("epoch")
-    eta0 = epochParam.json().get("nonce")
+#### KOIOS API
+     #### KOIOS API
 
-    netStakeParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/epochs/latest", headers=headers)
-    json_data = netStakeParam.json()
-    nStake = int(netStakeParam.json().get("active_stake")) / lovelaces
-    nStake = "{:,}".format(nStake)
-    print("Net Stake: "+nStake)
+    epochParam = kp.get_tip()
+    epoch = epochParam[0]["epoch_no"]
 
-    poolStakeParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId, headers=headers)
-    json_data = poolStakeParam.json()
-    pStake = int(poolStakeParam.json().get("active_stake")) / lovelaces
-    pStake = "{:,}".format(pStake)
-    print("Net Stake: "+pStake)
+    netStakeParam = kp.get_epoch_params(epoch)
+    eta0 =  netStakeParam[0]["nonce"]
 
-    poolSigma = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/pools/"+PoolId, headers=headers)
-    json_data = poolSigma.json()
-    sigma = poolSigma.json().get("active_size")
-    print("Net Stake: "+sigma)
+    epoch_info = kp.get_epoch_info(epoch)
+    nStake = epoch_info[0]["active_stake"]
+    print("Pool Stake: "+str(nStake))
+
+    poolStakeParam = kp.get_pool_info(pool_id_bech32)
+    pStake = poolStakeParam[0]["active_stake"]
+
+    print("Pool Stake: "+str(pStake))
+
+    sigma = float(pStake) / float(nStake)
+    print("Sigma: "+str(sigma))
 
     print()
     print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
     print()
-    print(f'Pool Id: ' + (col.green + PoolId + col.endcl))
+    print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
     print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
     print()
@@ -257,18 +177,17 @@ libsodium.sodium_init()
 ################################################## ###
 
 ### Blockchain Genesis Parameters ###
-headers = {'content-type': 'application/json', 'project_id': BlockFrostId}
-GenesisParam = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/genesis", headers=headers)
-json_data = GenesisParam.json()
+GenesisParam = kp.get_genesis()
 
-epochLength = GenesisParam.json().get("epoch_length")
-activeSlotCoeff = GenesisParam.json().get("active_slots_coefficient")
-slotLength = GenesisParam.json().get("slot_length")
+epochLength = GenesisParam[0]["epochlength"]
+activeSlotCoeff = GenesisParam[0]["activeslotcoeff"]
+slotLength = GenesisParam[0]["slotlength"]
 
-### Epoch211FirstSlot ###
-firstShelleySlot = requests.get("https://cardano-mainnet.blockfrost.io/api/v0/blocks/4555184", headers=headers)
-json_data = firstShelleySlot.json()
-firstSlot = firstShelleySlot.json().get("slot")
+### Epoch 211 First Slot ###
+firstShelleySlot = kp.get_block_info("33a28456a44277cbfb3457082467e56f16554932eb2a9eb7ceca97740bd4f4db")
+firstSlot = firstShelleySlot[0]["abs_slot"]
+
+
 
 ### calculate first slot of target epoch ###
 firstSlotOfEpoch = (firstSlot) + (epoch - 211)*epochLength
