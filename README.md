@@ -1,5 +1,6 @@
 # Cardano Leader Slot
 Scheduled Block Checker for Cardano Stakepool Operators. 
+
 *Warning: At the moment these scriptis are just working for the currents epochs.*
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
