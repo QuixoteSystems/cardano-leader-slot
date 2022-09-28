@@ -18,9 +18,9 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 ## Setup:
 
 ### Koios API version:
-- clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
-- execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
-- make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
+- Clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
+- Execute inside the newly cloned directory: ```pip install -r pip_requirements.txt ```  to install all needed python package requirements
+- Make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
 - Set Variables on lines 27-35 of leaderslot_blockfrost.py:
 
@@ -37,16 +37,15 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 ~~~
 
 
-### Blockfrost API version (It will be remove from this project):
-- clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
-- execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
-- get a project id on blockfrost.io
-- make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
+### Blockfrost API version ###(It will be remove from this project):
+- Clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
+- Execute inside the newly cloned directory: ```pip install -r pip_requirements.txt   ```  to install all needed python package requirements
+- Get a project id on blockfrost.io
+- Make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
 - Set Variables on lines 26-34 of leaderslot_blockfrost.py:
 ~~~
 ### Set your own timezone -----------------------------------------###
-
 local_tz = pytz.timezone('')
 
 ### Set These Variables ###
