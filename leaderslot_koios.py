@@ -71,7 +71,8 @@ print(col.green + f'Welcome to Light Leader Slot Script for Cardano SPOs. ')
 print()
 print(col.green + f'Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
 print(col.endcl)
-#print(col.green + f'Current Epoch: ' + col.endcl +str(Cepoch))
+#print(col.green + f'Current Epoch: ' + col.endcl +str(current_epoch))
+
 
 print(col.endcl)
 print(f'(n) to Check Next Epoch Schedules ' +str(msg))
