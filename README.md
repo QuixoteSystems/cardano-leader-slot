@@ -1,7 +1,7 @@
 # Cardano Leader Slot
 Scheduled Block Checker for Cardano Stakepool Operators. 
 
-*Warning: At the moment these scriptis are just working for the currents epochs.*
+*Warning: At the moment these scripts are just working for the currents epochs.*
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
 No cardano-node required, data is taken from blockfrost.io and armada-alliance.com
@@ -11,7 +11,7 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 
 
 ## Prerequisites:
-- Python 3.8
+- Python 3.8 or higher version
 - pip (Python package installer)
 - libsodium library
 
@@ -29,7 +29,7 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 local_tz = pytz.timezone('Europe/Berlin')
 
 ### Set These Variables ###
-PoolTicker = "YOUT_POOL_TICKER"
+PoolTicker = "YOUR_POOL_TICKER"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
@@ -50,8 +50,8 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 local_tz = pytz.timezone('')
 
 ### Set These Variables ###
-BlockFrostId = "YOUR_IP"
-PoolId = "YOUR_POOL_ID_HEX
+BlockFrostId = "YOUR_BLOCKFROST_ID"
+PoolId = "YOUR_POOL_ID_HEX"
 PoolTicker = "YOUR_POOL_TICKER"
 VrfKeyFile = ('YOUR_VRF_FILE_PATH')
 
