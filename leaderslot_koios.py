@@ -40,33 +40,34 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 ada = " \u20B3"
 lovelaces = 1000000
 
-### Get Current Epoch from Armada Alliance ###
-headers_armada ={'content-type': 'application/json'}
+### Get Epoch Info from Adamantium Site (Star Forge Pool [OTG]) ###
+otg_headers ={'content-type': 'application/json'}
 
 # Comment because Armada nonce is not working still
 #CepochParam = requests.get("https://nonce.armada-alliance.io/current", headers=headers_armada)
 #json_data = CepochParam.json()
 #Cepoch = CepochParam.json().get("epoch")
 
-### Get Next Epoch Nonce from Armada Alliance ###
+### Get Next Epoch Nonce from Adamantium Site (Star Forge Pool [OTG]) ###
 try:
-    NepochParam = requests.get("https://nonce.armada-alliance.io/next", headers=headers_armada)
-    json_data = NepochParam.json()
-    Nepoch = NepochParam.json().get("epoch")
-    Neta0 = NepochParam.json().get("nonce")
+    next_epoch_parameters = requests.get("https://nonce.adamantium.online/next.json", headers=otg_headers)
+    json_data = next_epoch_parameters.json()
+    next_epoch = next_epoch_parameters.json().get("epoch")
+    next_eta0 = next_epoch_parameters.json().get("nonce")
+
     ErrorMsg = "Query returned no rows"
-    if ErrorMsg in Neta0 :
+    if ErrorMsg in next_eta0 :
         msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
-    if ErrorMsg not in Neta0 :
+    if ErrorMsg not in next_eta0 :
         msg = str(col.green + f'(Next Epoch Nonce Available)')
 
 except OSError as ErrorMsg:
-    msg = str(col.red + f'(Failed to establish connection to nonce.armada-alliance.io)')
+    msg = str(col.red + f'(Failed to establish connection to nonce.adamantium.online)')
 
 
 ### User Prompt for specific prev/curr Epochs
 print()
-print(col.green + f'Welcome to ScheduledBlocks for Cardano SPOs. ')
+print(col.green + f'Welcome to Light Leader Slot Script for Cardano SPOs. ')
 print()
 print(col.green + f'Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
 print(col.endcl)
@@ -77,40 +78,68 @@ print(f'(n) to Check Next Epoch Schedules ' +str(msg))
 print(col.endcl)
 print(f'(c) to Check Current Epoch')
 print(col.endcl)
-print(f'(p) to Check Previous Epochs')
-print(col.endcl)
+
+## TODO
+#print(f'(p) to Check Previous Epochs')
+#print(col.endcl)
+
 print(f'(any key) to Exit')
 print(col.endcl)
 
 ### Read Keyboard keys ###
 key = readchar.readkey()
 
-if(key == 'n'):
 
-### Get data from Armada Alliance and Blockfrost.io ###
+### NEXT EPOCH. Get data from Koios & OTG Pool ###
+
+if key == 'n':
 
     ClearScreen()
 
+    epoch_parameters = kp.get_tip()
+    epoch = epoch_parameters[0]["epoch_no"]
+    epoch = int(next_epoch)
+    current_epoch = epoch - 1
+
+    netStakeParam = kp.get_epoch_params(current_epoch)
+    #eta0 =  netStakeParam[0]["nonce"]
+    eta0= next_eta0
+    epoch_info = kp.get_epoch_info(current_epoch)
+    nStake = epoch_info[0]["active_stake"]
+
+    poolStakeParam = kp.get_pool_info(pool_id_bech32)
+    pStake = poolStakeParam[0]["active_stake"]
+
+    sigma = float(pStake) / float(nStake)
+
+    print()
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
+    print()
+    print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
+    print()
+    print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
+    print()
+    print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
+    print()
+    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(nStake) + col.endcl + ada + col.endcl)
+    print()
+    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(pStake) + col.endcl + ada + col.endcl)
+    print()
 
 
-if(key == 'p'):
+if key == 'p':
 
     ClearScreen()
     print()
     Epoch = input("Enter Epoch Previous Number: " + col.green)
     print(col.endcl)
 
- ### Get data from blockfrost.io APIs ###
 
-   
+### CURRENT EPOCH. Get data from Koios ###
 
-
-if(key == 'c'):
+if key == 'c':
 
     ClearScreen()
-
-#### KOIOS API
-     #### KOIOS API
 
     epochParam = kp.get_tip()
     epoch = epochParam[0]["epoch_no"]
