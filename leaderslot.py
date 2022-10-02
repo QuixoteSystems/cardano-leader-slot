@@ -63,7 +63,7 @@ except OSError as ErrorMsg:
     msg = str(col.red + f'(Failed to establish connection to nonce.adamantium.online)')
 
 
-### User Prompt for specific prev/curr Epochs
+### User Prompt Menu to select what kind of Epochs you want to know
 print()
 print()
 
