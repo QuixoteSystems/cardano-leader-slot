@@ -68,9 +68,10 @@ print()
 print()
 
 ### Figlet Fancy Welcome Header
-cardano = pyfiglet.figlet_format("Cardano")
-leader_slot = pyfiglet.figlet_format("Leader Slot")
 try:
+    cardano = pyfiglet.figlet_format("Cardano")
+    leader_slot = pyfiglet.figlet_format("Leader Slot")
+
     print(col.green + cardano)
     print(col.green + leader_slot)
 except:
