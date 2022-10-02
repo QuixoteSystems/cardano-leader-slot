@@ -68,8 +68,8 @@ print()
 cardano = pyfiglet.figlet_format("Cardano")
 leader_slot = pyfiglet.figlet_format("Leader Slot")
 try:
-    print(cardano)
-    print(leader_slot)
+    print(col.green + cardano)
+    print(col.green + leader_slot)
 except:
     pass
 
