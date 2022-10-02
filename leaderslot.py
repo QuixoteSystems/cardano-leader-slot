@@ -14,6 +14,7 @@ from os import system, path
 from datetime import datetime, timezone
 from sys import exit, platform
 import koios_python as kp
+import pyfiglet
 
 class col:
     red = '\033[31m'
@@ -35,18 +36,12 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 ### -------------------------------------------------------------- ###
 
 
-
 ### ADA Unicode symbol and Lovelaces removal ###
 ada = " \u20B3"
 lovelaces = 1000000
 
 ### Get Epoch Info from Adamantium Site (Star Forge Pool [OTG]) ###
 otg_headers ={'content-type': 'application/json'}
-
-# Comment because Armada nonce is not working still
-#CepochParam = requests.get("https://nonce.armada-alliance.io/current", headers=headers_armada)
-#json_data = CepochParam.json()
-#Cepoch = CepochParam.json().get("epoch")
 
 ### Get Next Epoch Nonce from Adamantium Site (Star Forge Pool [OTG]) ###
 try:
@@ -67,6 +62,17 @@ except OSError as ErrorMsg:
 
 ### User Prompt for specific prev/curr Epochs
 print()
+print()
+
+### Figlet Fancy Welcome Header
+cardano = pyfiglet.figlet_format("Cardano")
+leader_slot = pyfiglet.figlet_format("Leader Slot")
+try:
+    print(cardano)
+    print(leader_slot)
+except:
+    pass
+
 print(col.green + f'Welcome to Light Leader Slot Script for Cardano SPOs. ')
 print()
 print(col.green + f'Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
