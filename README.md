@@ -3,6 +3,9 @@ Scheduled Block Checker for Cardano Stakepool Operators.
 
 *Warning: At the moment this script are working for the Current and Next epochs.*
 
+![cardano](https://user-images.githubusercontent.com/82296005/193456430-4aad96b9-5306-49d7-afe6-30f2320f15b0.jpg)
+
+
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
 No cardano-node required, data is taken from blockfrost.io and armada-alliance.com
 
