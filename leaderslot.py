@@ -14,7 +14,10 @@ from os import system, path
 from datetime import datetime, timezone
 from sys import exit, platform
 import koios_python as kp
-import pyfiglet
+try:
+    import pyfiglet
+except:
+    pass
 
 class col:
     red = '\033[31m'
