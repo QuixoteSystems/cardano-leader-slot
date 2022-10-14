@@ -89,10 +89,8 @@ print(f'(n) to Check Next Epoch Schedules ' +str(msg))
 print(col.endcl)
 print(f'(c) to Check Current Epoch')
 print(col.endcl)
-
-## TODO
-#print(f'(p) to Check Previous Epochs')
-#print(col.endcl)
+print(f'(p) to Check Previous Epochs')
+print(col.endcl)
 
 print(f'(any key) to Exit')
 print(col.endcl)
