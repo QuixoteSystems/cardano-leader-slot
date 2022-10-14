@@ -103,7 +103,7 @@ key = readchar.readkey()
 
 ### NEXT EPOCH. Get data from Koios & OTG Pool ###
 
-if key == 'n' or 'N':
+if key == 'n':
 
     ClearScreen()
 
@@ -139,7 +139,7 @@ if key == 'n' or 'N':
 
 ### CURRENT PREVIUOS. Get data from Koios ###
 
-if key == 'p' or 'P':
+if key == 'p':
 
     ClearScreen()
     print()
@@ -147,7 +147,7 @@ if key == 'p' or 'P':
     print(col.endcl)
 
     ### Get data from blockfrost.io APIs ###
-    if epoch > 364:
+    if epoch >= 364:
         
         epoch_param = kp.get_tip()
         epoch = epoch_param[0]["epoch_no"]
@@ -181,7 +181,7 @@ if key == 'p' or 'P':
 
 ### CURRENT EPOCH. Get data from Koios ###
 
-if key == 'c' or 'C':
+if key == 'c':
 
     ClearScreen()
 
@@ -216,7 +216,7 @@ if key == 'c' or 'C':
 
 
 ### ############### ###
-if(key != 'p' or 'P') and (key != 'c' or 'C') and (key != 'n' or 'N'):
+if(key != 'p') and (key != 'c') and (key != 'n'):
     exit(0)
 
 ######################################
