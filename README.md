@@ -1,7 +1,7 @@
 # Cardano Leader Slot
 Scheduled Block Checker for Cardano Stakepool Operators. 
 
-![cardano](https://user-images.githubusercontent.com/82296005/193456430-4aad96b9-5306-49d7-afe6-30f2320f15b0.jpg)
+![cardano-leader-slot](https://user-images.githubusercontent.com/82296005/195933862-96568b7d-4378-42a5-90a7-47195051889a.png)
 
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
