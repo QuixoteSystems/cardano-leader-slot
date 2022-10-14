@@ -334,7 +334,7 @@ slotcount=0
 
 for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
 
-    slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, n_stake)
+    slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
 
     seed = mkSeed(slot, eta0)
     praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
