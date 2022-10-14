@@ -5,7 +5,7 @@ Scheduled Block Checker for Cardano Stakepool Operators.
 
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
-No cardano-node required, data is taken from [Koios API](https://www.koios.rest/) and [adamantium.online](https://adamantium.online/)
+No cardano-node required, just your VRF Key file. All data is taken from [Koios API](https://www.koios.rest/) and [adamantium.online](https://adamantium.online/)
 
 Note: This is a reworking of old python script ScheduledBlocks.py 
 available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks and using Ouroboros Praos updated code from https://github.com/dostrelith678/cardano-leader-logs
@@ -29,8 +29,8 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 local_tz = pytz.timezone('Europe/Berlin')
 
 ### Set These Variables ###
-PoolTicker = "YOUR_POOL_TICKER"
-VrfKeyFile = ('YOUR_VRF_FILE_PATH')
+pool_ticker = "YOUR_POOL_TICKER"
+vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ### -------------------------------------------------------------- ###
