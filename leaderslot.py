@@ -32,8 +32,8 @@ def ClearScreen():
 local_tz = pytz.timezone('Europe/Berlin')
 
 ### Set These Variables ###
-PoolTicker = "YOUT_POOL_TICKER"
-VrfKeyFile = ('YOUR_VRF_FILE_PATH')
+pool_ticker = "YOUT_POOL_TICKER"
+vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ### -------------------------------------------------------------- ###
@@ -103,7 +103,7 @@ key = readchar.readkey()
 
 ### NEXT EPOCH. Get data from Koios & OTG Pool ###
 
-if key == 'n':
+if key == 'n' or 'N':
 
     ClearScreen()
 
@@ -124,7 +124,7 @@ if key == 'n':
     sigma = float(pStake) / float(nStake)
 
     print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
     print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
@@ -137,38 +137,71 @@ if key == 'n':
     print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(pStake) + col.endcl + ada + col.endcl)
     print()
 
+### CURRENT PREVIUOS. Get data from Koios ###
 
-if key == 'p':
+if key == 'p' or 'P':
 
     ClearScreen()
     print()
-    Epoch = input("Enter Epoch Previous Number: " + col.green)
+    epoch = input("Enter Epoch Previous Number: " + col.green)
     print(col.endcl)
+
+    ### Get data from blockfrost.io APIs ###
+    if epoch > 364:
+        
+        epoch_param = kp.get_tip()
+        epoch = epoch_param[0]["epoch_no"]
+
+        net_stake_param = kp.get_epoch_params(epoch)
+        eta0 =  net_stake_param[0]["nonce"]
+
+        epoch_info = kp.get_epoch_info(epoch)
+        n_stake = epoch_info[0]["active_stake"]
+
+        pool_stake_param = kp.get_pool_info(pool_id_bech32)
+        p_stake = pool_stake_param[0]["active_stake"]
+
+        sigma = float(p_stake) / float(n_stake)
+
+
+        print()
+        print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+        print()
+        print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
+        print()
+        print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
+        print()
+        print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
+        print()
+        print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
+        print()
+        print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
+        print()
 
 
 ### CURRENT EPOCH. Get data from Koios ###
 
-if key == 'c':
+if key == 'c' or 'C':
 
     ClearScreen()
 
-    epochParam = kp.get_tip()
-    epoch = epochParam[0]["epoch_no"]
+    epoch_param = kp.get_tip()
+    epoch = epoch_param[0]["epoch_no"]
 
-    netStakeParam = kp.get_epoch_params(epoch)
-    eta0 =  netStakeParam[0]["nonce"]
+    net_stake_param = kp.get_epoch_params(epoch)
+    eta0 =  net_stake_param[0]["nonce"]
 
     epoch_info = kp.get_epoch_info(epoch)
-    nStake = epoch_info[0]["active_stake"]
+    n_stake = epoch_info[0]["active_stake"]
 
-    poolStakeParam = kp.get_pool_info(pool_id_bech32)
-    pStake = poolStakeParam[0]["active_stake"]
+    pool_stake_param = kp.get_pool_info(pool_id_bech32)
+    p_stake = pool_stake_param[0]["active_stake"]
 
     sigma = float(pStake) / float(nStake)
 
 
     print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
     print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
@@ -176,23 +209,24 @@ if key == 'c':
     print()
     print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
     print()
-    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(nStake) + col.endcl + ada + col.endcl)
+    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
     print()
-    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(pStake) + col.endcl + ada + col.endcl)
+    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
     print()
 
 
 ### ############### ###
-if(key != 'p') and (key != 'c') and (key != 'n'):
+if(key != 'p' or 'P') and (key != 'c' or 'C') and (key != 'n' or 'N'):
     exit(0)
 
-
-### Calculate Slots Leader ###
+######################################
+####### Calculate Slots Leader ######
+#####################################
 
 ### Opening vrf.skey file ###
-with open(VrfKeyFile) as f:
+with open(vrf_key_file) as f:
         skey = json.load(f)
-        poolVrfSkey = skey['cborHex'][4:]
+        pool_vrf_skey = skey['cborHex'][4:]
 
 ### Determine libsodium path based on platform ###
 libsodium = None
@@ -280,12 +314,12 @@ def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
 # @param activeSlotsCoeff The activeSlotsCoeff value from protocol params
 # @param sigma The controlled stake proportion for the pool
 # @param eta0 The epoch nonce value
-# @param poolVrfSkey The vrf signing key for the pool
+# @param pool_vrf_skey The vrf signing key for the pool
 
 
-def isSlotLeader(slot, activeSlotsCoeff, sigma, eta0, poolVrfSkey):
+def isSlotLeader(slot, activeSlotsCoeff, sigma, eta0, pool_vrf_skey):
     seed = mkSeed(slot, eta0)
-    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(poolVrfSkey)
+    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
     cert = vrfEvalCertified(seed, praosCanBeLeaderSignKeyVRFb)
     certLeaderVrf = vrfLeaderValue(cert)
     certNatMax = math.pow(2, 256)
@@ -300,10 +334,10 @@ slotcount=0
 
 for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
 
-    slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, poolVrfSkey)
+    slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, n_stake)
 
     seed = mkSeed(slot, eta0)
-    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(poolVrfSkey)
+    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
     cert = vrfEvalCertified(seed,praosCanBeLeaderSignKeyVRFb)
     certLeaderVrf = vrfLeaderValue(cert)
     certNatMax = math.pow(2,256)
@@ -327,19 +361,19 @@ print("Total Scheduled Blocks: " + str(slotcount))
 
 blocksEpoch = 21600
 
-nStake = nStake.replace(',','')
-pStake = pStake.replace(',','')
+n_stake = n_stake.replace(',','')
+p_stake = p_stake.replace(',','')
 
-nStake = float(nStake)
-pStake = float(pStake)
+n_stake = float(n_stake)
+p_stake = float(p_stake)
 
-nStake = math.trunc(nStake)
-pStake = math.trunc(pStake)
+n_stake = math.trunc(n_stake)
+p_stake = math.trunc(p_stake)
 
-EpochLuck = int(100 * slotcount) / (blocksEpoch * pStake / nStake)
+epoch_luck = int(100 * slotcount) / (blocksEpoch * p_stake / n_stake)
 
 print()
-print(f'Assigned Epoch Performance: ' + str(format(EpochLuck, ".2f")) + ' %' )
+print(f'Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
 
 
 if slotcount == 0:
