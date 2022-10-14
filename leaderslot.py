@@ -116,12 +116,12 @@ if key == 'n':
     #eta0 =  netStakeParam[0]["nonce"]
     eta0= next_eta0
     epoch_info = kp.get_epoch_info(current_epoch)
-    nStake = epoch_info[0]["active_stake"]
+    n_stake = epoch_info[0]["active_stake"]
 
     poolStakeParam = kp.get_pool_info(pool_id_bech32)
-    pStake = poolStakeParam[0]["active_stake"]
+    p_stake = poolStakeParam[0]["active_stake"]
 
-    sigma = float(pStake) / float(nStake)
+    sigma = float(p_stake) / float(n_stake)
 
     print()
     print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
@@ -132,9 +132,9 @@ if key == 'n':
     print()
     print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
     print()
-    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(nStake) + col.endcl + ada + col.endcl)
+    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
     print()
-    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(pStake) + col.endcl + ada + col.endcl)
+    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
     print()
 
 ### CURRENT PREVIUOS. Get data from Koios ###
@@ -197,7 +197,7 @@ if key == 'c':
     pool_stake_param = kp.get_pool_info(pool_id_bech32)
     p_stake = pool_stake_param[0]["active_stake"]
 
-    sigma = float(pStake) / float(nStake)
+    sigma = float(p_stake) / float(n_stake)
 
 
     print()
