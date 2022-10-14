@@ -144,37 +144,34 @@ if key == 'p':
     epoch = input("Enter Epoch Previous Number: " + col.green)
     print(col.endcl)
 
-    ### Get data from blockfrost.io APIs ###
-    if float(epoch) >= 364:
-        
-        epoch_param = kp.get_epoch_info(epoch)
-        epoch = epoch_param[0]["epoch_no"]
+    epoch_param = kp.get_epoch_info(epoch)
+    epoch = epoch_param[0]["epoch_no"]
 
-        net_stake_param = kp.get_epoch_params(epoch)
-        eta0 =  net_stake_param[0]["nonce"]
+    net_stake_param = kp.get_epoch_params(epoch)
+    eta0 =  net_stake_param[0]["nonce"]
 
-        epoch_info = kp.get_epoch_info(epoch)
-        n_stake = epoch_info[0]["active_stake"]
+    epoch_info = kp.get_epoch_info(epoch)
+    n_stake = epoch_info[0]["active_stake"]
 
-        pool_stake_param = kp.get_pool_info(pool_id_bech32)
-        p_stake = pool_stake_param[0]["active_stake"]
+    pool_stake_param = kp.get_pool_info(pool_id_bech32)
+    p_stake = pool_stake_param[0]["active_stake"]
 
-        sigma = float(p_stake) / float(n_stake)
+    sigma = float(p_stake) / float(n_stake)
 
 
-        print()
-        print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
-        print()
-        print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
-        print()
-        print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
-        print()
-        print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
-        print()
-        print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
-        print()
-        print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
-        print()
+    print()
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+    print()
+    print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
+    print()
+    print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
+    print()
+    print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
+    print()
+    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
+    print()
+    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
+    print()
 
 
 ### CURRENT EPOCH. Get data from Koios ###
@@ -258,14 +255,14 @@ firstSlot = firstShelleySlot[0]["abs_slot"]
 
 
 
-### calculate first slot of target epoch ###
+### Calculate first slot of target Epoch ###
 firstSlotOfEpoch = (firstSlot) + (epoch - 211) * (epochLength)
 
 from decimal import *
 getcontext().prec = 9
 getcontext().rounding = ROUND_HALF_UP
 
-def mkSeed(slot, eta0):
+def mk_seed(slot, eta0):
     h = hashlib.blake2b(digest_size=32)
     h.update(slot.to_bytes(8, byteorder='big') + binascii.unhexlify(eta0))
     slotToSeedBytes = h.digest()
@@ -273,23 +270,20 @@ def mkSeed(slot, eta0):
     return slotToSeedBytes
 
 
-def vrfEvalCertified(seed, praosCanBeLeaderSignKeyVRF):
-    if isinstance(seed, bytes) and isinstance(praosCanBeLeaderSignKeyVRF,
-                                              bytes):
-        proof = create_string_buffer(
-            libsodium.crypto_vrf_ietfdraft03_proofbytes())
-        libsodium.crypto_vrf_prove(proof, praosCanBeLeaderSignKeyVRF, seed,
-                                   len(seed))
-        proofHash = create_string_buffer(libsodium.crypto_vrf_outputbytes())
-        libsodium.crypto_vrf_proof_to_hash(proofHash, proof)
+def vrf_eval_certified(seed, praosCanBeLeaderSignKeyVRF):
+    if isinstance(seed, bytes) and isinstance(praosCanBeLeaderSignKeyVRF, bytes):
+        proof = create_string_buffer(libsodium.crypto_vrf_ietfdraft03_proofbytes())
+        libsodium.crypto_vrf_prove(proof, praosCanBeLeaderSignKeyVRF, seed, len(seed))
+        proof_hash = create_string_buffer(libsodium.crypto_vrf_outputbytes())
+        libsodium.crypto_vrf_proof_to_hash(proof_hash, proof)
 
-        return proofHash.raw
+        return proof_hash.raw
     else:
-        print("error.  Feed me bytes")
+        print("Error.  Feed me bytes")
         exit()
 
 
-def vrfLeaderValue(vrfCert):
+def vrf_leader_value(vrfCert):
     h = hashlib.blake2b(digest_size=32)
     h.update(str.encode("L"))
     h.update(vrfCert)
@@ -307,6 +301,30 @@ def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
     return False
 
 
+### Epoch Assigned Performance or Luck ###
+def get_performance():
+    blocksEpoch = 21600
+
+    n_stake = n_stake.replace(',','')
+    p_stake = p_stake.replace(',','')
+
+    n_stake = float(n_stake)
+    p_stake = float(p_stake)
+
+    n_stake = math.trunc(n_stake)
+    p_stake = math.trunc(p_stake)
+
+    epoch_luck = int(100 * slotcount) / (blocksEpoch * p_stake / n_stake)
+
+    print()
+    print(f'Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
+
+
+    if slotcount == 0:
+        print()
+        print("No SlotLeader Schedules Found for Epoch: " +str(epoch))
+        exit
+
 # Determine if our pool is a slot leader for this given slot
 # @param slot The slot to check
 # @param activeSlotsCoeff The activeSlotsCoeff value from protocol params
@@ -314,67 +332,100 @@ def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
 # @param eta0 The epoch nonce value
 # @param pool_vrf_skey The vrf signing key for the pool
 
+### For Epochs inside Praos Time ###
+if float(epoch) >= 364:
+    def is_slot_leader(slot, activeSlotsCoeff, sigma, eta0, pool_vrf_skey):
+        seed = mk_seed(slot, eta0)
+        praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
+        cert = vrf_eval_certified(seed, praosCanBeLeaderSignKeyVRFb)
+        certLeaderVrf = vrf_leader_value(cert)
+        certNatMax = math.pow(2, 256)
+        denominator = certNatMax - certLeaderVrf
+        q = certNatMax / denominator
+        c = math.log(1.0 - activeSlotsCoeff)
+        sigmaOfF = math.exp(-sigma * c)
 
-def isSlotLeader(slot, activeSlotsCoeff, sigma, eta0, pool_vrf_skey):
-    seed = mkSeed(slot, eta0)
-    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
-    cert = vrfEvalCertified(seed, praosCanBeLeaderSignKeyVRFb)
-    certLeaderVrf = vrfLeaderValue(cert)
-    certNatMax = math.pow(2, 256)
-    denominator = certNatMax - certLeaderVrf
-    q = certNatMax / denominator
-    c = math.log(1.0 - activeSlotsCoeff)
-    sigmaOfF = math.exp(-sigma * c)
+        return q <= sigmaOfF
 
-    return q <= sigmaOfF
+    slotcount=0
 
-slotcount=0
+    for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
 
-for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
+        slotLeader = is_slot_leader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
 
-    slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
+        seed = mk_seed(slot, eta0)
+        praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
+        cert = vrf_eval_certified(seed,praosCanBeLeaderSignKeyVRFb)
+        certLeaderVrf = vrf_leader_value(cert)
+        certNatMax = math.pow(2,256)
+        denominator = certNatMax - certLeaderVrf
+        q = certNatMax / denominator
+        c = math.log(1.0 - activeSlotCoeff)
+        sigmaOfF = math.exp(-sigma * c)
 
-    seed = mkSeed(slot, eta0)
-    praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
-    cert = vrfEvalCertified(seed,praosCanBeLeaderSignKeyVRFb)
-    certLeaderVrf = vrfLeaderValue(cert)
-    certNatMax = math.pow(2,256)
-    denominator = certNatMax - certLeaderVrf
-    q = certNatMax / denominator
-    c = math.log(1.0 - activeSlotCoeff)
-    sigmaOfF = math.exp(-sigma * c)
+        if slotLeader:
+            pass
+            timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
+            slotcount+=1
 
-    if slotLeader:
-        pass
-        timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
-        slotcount+=1
-
-        print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
-
-print()
-print("Total Scheduled Blocks: " + str(slotcount))
-
-
-### Epoch Assigned Performance or Luck ###
-
-blocksEpoch = 21600
-
-n_stake = n_stake.replace(',','')
-p_stake = p_stake.replace(',','')
-
-n_stake = float(n_stake)
-p_stake = float(p_stake)
-
-n_stake = math.trunc(n_stake)
-p_stake = math.trunc(p_stake)
-
-epoch_luck = int(100 * slotcount) / (blocksEpoch * p_stake / n_stake)
-
-print()
-print(f'Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
-
-
-if slotcount == 0:
+            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
     print()
-    print("No SlotLeader Schedules Found for Epoch: " +str(epoch))
-    exit
+    print("Total Scheduled Blocks: " + str(slotcount))
+
+    get_performance()
+
+
+### For old Epochs inside TPraos Time ###
+else:
+    def mkSeed(slot, eta0):
+        h = hashlib.blake2b(digest_size=32)
+        h.update(bytearray([0,0,0,0,0,0,0,1])) #neutral nonce
+        seedLbytes=h.digest()
+        h = hashlib.blake2b(digest_size=32)
+        h.update(slot.to_bytes(8,byteorder='big') + binascii.unhexlify(eta0))
+        slotToSeedBytes = h.digest()
+        seed = [x ^ slotToSeedBytes[i] for i,x in enumerate(seedLbytes)]
+        return bytes(seed)
+
+    def vrfEvalCertified(seed, tpraosCanBeLeaderSignKeyVRF):
+        if isinstance(seed, bytes) and isinstance(tpraosCanBeLeaderSignKeyVRF, bytes):
+            proof = create_string_buffer(libsodium.crypto_vrf_ietfdraft03_proofbytes())
+            libsodium.crypto_vrf_prove(proof, tpraosCanBeLeaderSignKeyVRF,seed, len(seed))
+            proofHash = create_string_buffer(libsodium.crypto_vrf_outputbytes())
+            libsodium.crypto_vrf_proof_to_hash(proofHash,proof)
+            return proofHash.raw
+        else:
+            print("error.  Feed me bytes")
+            exit()
+
+    # Determine if our pool is a slot leader for this given slot
+    # @param slot The slot to check
+    # @param activeSlotCoeff The activeSlotsCoeff value from protocol params
+    # @param sigma The controlled stake proportion for the pool
+    # @param eta0 The epoch nonce value
+    # @param pool_vrf_skey The vrf signing key for the pool
+
+    def isSlotLeader(slot,activeSlotCoeff,sigma,eta0,pool_vrf_skey):
+        seed = mkSeed(slot, eta0)
+        tpraosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
+        cert=vrfEvalCertified(seed,tpraosCanBeLeaderSignKeyVRFb)
+        certNat  = int.from_bytes(cert, byteorder="big", signed=False)
+        certNatMax = math.pow(2,512)
+        denominator = certNatMax - certNat
+        q = certNatMax / denominator
+        c = math.log(1.0 - activeSlotCoeff)
+        sigmaOfF = math.exp(-sigma * c)
+        return q <= sigmaOfF
+    slotcount=0
+    for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
+        slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
+        if slotLeader:
+            pass
+            timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
+            slotcount+=1
+            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch)))
+    print()
+    print("Total Scheduled Blocks: " + str(slotcount))
+
+    get_performance()
+
