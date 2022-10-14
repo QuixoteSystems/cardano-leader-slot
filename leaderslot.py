@@ -147,9 +147,9 @@ if key == 'p':
     print(col.endcl)
 
     ### Get data from blockfrost.io APIs ###
-    if epoch >= 364:
+    if float(epoch) >= 364:
         
-        epoch_param = kp.get_tip()
+        epoch_param = kp.get_epoch_info(epoch)
         epoch = epoch_param[0]["epoch_no"]
 
         net_stake_param = kp.get_epoch_params(epoch)
