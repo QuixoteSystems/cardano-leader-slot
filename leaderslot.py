@@ -302,7 +302,7 @@ def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
 
 
 ### Epoch Assigned Performance or Luck ###
-def get_performance():
+def get_performance(n_stake, p_stake):
     blocksEpoch = 21600
 
     n_stake = n_stake.replace(',','')
@@ -372,10 +372,10 @@ if float(epoch) >= 364:
     print()
     print("Total Scheduled Blocks: " + str(slotcount))
 
-    get_performance()
+    get_performance(n_stake, p_stake)
 
 
-### For old Epochs inside TPraos Time ###
+### For old Epochs inside TPraos Time (before Current Ouroboros Praos) ###
 else:
     def mkSeed(slot, eta0):
         h = hashlib.blake2b(digest_size=32)
@@ -423,9 +423,9 @@ else:
             pass
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
             slotcount+=1
-            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch)))
+            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
     print()
     print("Total Scheduled Blocks: " + str(slotcount))
 
-    get_performance()
+    get_performance(n_stake, p_stake)
 
