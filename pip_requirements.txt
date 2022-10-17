@@ -4,3 +4,4 @@ urllib3
 readchar
 pyfiglet
 koios-python
+python-dotenv

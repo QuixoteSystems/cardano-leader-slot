@@ -13,6 +13,8 @@ from ctypes import *
 from os import system, path
 from datetime import datetime, timezone
 from sys import exit, platform
+import subprocess as sp
+from dotenv import load_dotenv
 import koios_python as kp
 try:
     import pyfiglet
@@ -28,35 +30,23 @@ def ClearScreen():
     command ='clear'
     system(command)
 
-### Set your onw timezone -----------------------------------------###
-local_tz = pytz.timezone('Europe/Berlin')
-
-### Set These Variables ###
-pool_ticker = "YOUT_POOL_TICKER"
-vrf_key_file = ('YOUR_VRF_FILE_PATH')
-pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
-
-### -------------------------------------------------------------- ###
-
+load_dotenv() 
 
 ### ADA Unicode symbol and Lovelaces removal ###
 ada = " \u20B3"
 lovelaces = 1000000
 
-### Get Epoch Info from Adamantium Site (Star Forge Pool [OTG]) ###
-otg_headers ={'content-type': 'application/json'}
 
-### Get Next Epoch Nonce from Adamantium Site (Star Forge Pool [OTG]) ###
 try:
-    next_epoch_parameters = requests.get("https://nonce.adamantium.online/next.json", headers=otg_headers)
-    json_data = next_epoch_parameters.json()
-    next_epoch = next_epoch_parameters.json().get("epoch")
-    next_eta0 = next_epoch_parameters.json().get("nonce")
+    epoch_parameters = kp.get_tip()
+    currEpoch = epoch_parameters[0]["epoch_no"]
+    nextEpoch = int(currEpoch + 1)
+    epochSlot = epoch_parameters[0]["epoch_slot"]
 
-    ErrorMsg = "Query returned no rows"
-    if ErrorMsg in next_eta0 :
-        msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
-    if ErrorMsg not in next_eta0 :
+### New epochNonce is not computable
+    if epochSlot <  302400:
+        ErrorMsg = "Stability window not reached yet"
+    if epochSlot >  302400:
         msg = str(col.green + f'(Next Epoch Nonce Available)')
 
 except OSError as ErrorMsg:
@@ -99,15 +89,29 @@ print(col.endcl)
 key = readchar.readkey()
 
 
-### NEXT EPOCH. Get data from Koios & OTG Pool ###
+### NEXT EPOCH. Get data from Koios###
 
 if key == 'n':
 
     ClearScreen()
-
+    ### newEpochNonce Availability ###
     epoch_parameters = kp.get_tip()
     epoch = epoch_parameters[0]["epoch_no"]
-    epoch = int(next_epoch)
+    nextEpoch = int(currEpoch + 1)
+    epochSlot = epoch_parameters[0]["epoch_slot"]
+
+    ### Take "candidateNonce" from protocol-state
+    candidateNonce = sp.getoutput('cardano-cli query protocol-state --mainnet | jq -r .candidateNonce.contents')
+
+    ### Take "lastEpochBlockNonce" from protocol-state
+    lastEpochBlockNonce = sp.getoutput("cardano-cli query protocol-state --mainnet | jq -r .lastEpochBlockNonce.contents")
+
+    ### Extract newEpochNonce
+    newEpochNonce = hashlib.blake2b(bytes.fromhex(candidateNonce + lastEpochBlockNonce),digest_size=32).hexdigest()
+
+    next_eta0 = newEpochNonce
+
+    epoch = int(epoch + 1)
     current_epoch = epoch - 1
 
     netStakeParam = kp.get_epoch_params(current_epoch)
@@ -122,7 +126,7 @@ if key == 'n':
     sigma = float(p_stake) / float(n_stake)
 
     print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
     print()
     print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
@@ -160,7 +164,7 @@ if key == 'p':
 
 
     print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
     print()
     print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
@@ -428,4 +432,3 @@ else:
     print("Total Scheduled Blocks: " + str(slotcount))
 
     get_performance(n_stake, p_stake)
-
