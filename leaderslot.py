@@ -1,17 +1,15 @@
 #!/bin/env python3
 
-import requests
-import urllib.request
 import math
 import binascii
 import json
 import pytz
 import hashlib
-import re
 import readchar
 from ctypes import *
+import os
 from os import system, path
-from datetime import datetime, timezone
+from datetime import datetime
 from sys import exit, platform
 import subprocess as sp
 from dotenv import load_dotenv
@@ -30,7 +28,12 @@ def ClearScreen():
     command ='clear'
     system(command)
 
-load_dotenv() 
+load_dotenv()
+local_tz = pytz.timezone(os.getenv('local_tz'))
+
+pool_ticker = os.getenv('pool_ticker')
+vrf_key_file = os.getenv('vrf_key_file')
+pool_id_bech32 = os.getenv('pool_id_bech32') 
 
 ### ADA Unicode symbol and Lovelaces removal ###
 ada = " \u20B3"
@@ -50,7 +53,7 @@ try:
         msg = str(col.green + f'(Next Epoch Nonce Available)')
 
 except OSError as ErrorMsg:
-    msg = str(col.red + f'(Failed to establish connection to nonce.adamantium.online)')
+    msg = str(col.red + f'(Failed to establish connection to api.koios.rest)')
 
 
 ### User Prompt Menu to select what kind of Epochs you want to know
@@ -126,7 +129,7 @@ if key == 'n':
     sigma = float(p_stake) / float(n_stake)
 
     print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
     print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
@@ -164,7 +167,7 @@ if key == 'p':
 
 
     print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + PoolTicker + col.endcl))
+    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
     print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
