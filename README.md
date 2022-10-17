@@ -4,8 +4,8 @@ Scheduled Block Checker for Cardano Stakepool Operators.
 ![cardano-leader-slot](https://user-images.githubusercontent.com/82296005/195933862-96568b7d-4378-42a5-90a7-47195051889a.png)
 
 
-Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
-No cardano-node required, just your VRF Key file. All data is taken from [Koios API](https://www.koios.rest/) & cardano-cli
+Lightweight Scheduled Blocks Checker for Next, Current and Previous Epochs.
+No cardano-node required for current and previous, just your VRF Key file. Will need cardano-cli connected to a node for next. All data is taken from [Koios API](https://www.koios.rest/) & the blockchain with cardano-cli.
 
 Note: This is a reworking of old python script ScheduledBlocks.py 
 available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks and using Ouroboros Praos updated code from https://github.com/dostrelith678/cardano-leader-logs
@@ -24,14 +24,14 @@ Next nonce with cardano-cli credited to SNAKE pool https://github.com/asnakep/ge
 - Execute inside the newly cloned directory: ```pip install -r pip_requirements.txt ```  to install all needed python package requirements
 - Make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
-- Set Variables in .env:
+- Create a .env file and set variables in .env:
 
 ~~~
-### Set your onw timezone -----------------------------------------###
-local_tz = pytz.timezone('Europe/Berlin')
+### Set your own timezone -----------------------------------------###
+local_tz = "Europe/Berlin"
 
 ### Set These Variables ###
-pool_ticker = "YOUR_POOL_TICKER"
+pool_ticker = "YOUT_POOL_TICKER"
 vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
