@@ -17,6 +17,7 @@ Next nonce with cardano-cli credited to SNAKE pool https://github.com/asnakep/ge
 - Python 3.8 or higher version
 - pip (Python package installer)
 - libsodium library
+- cardano-cli connected to a synced cardano-node socket(for next)
 
 ## Setup:
 
