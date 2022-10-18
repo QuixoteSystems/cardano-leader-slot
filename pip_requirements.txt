@@ -1,6 +1,6 @@
-pytz
 requests
 urllib3
 readchar
 pyfiglet
 koios-python
+tzlocal

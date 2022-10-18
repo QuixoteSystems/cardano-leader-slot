@@ -5,7 +5,7 @@ import urllib.request
 import math
 import binascii
 import json
-import pytz
+from tzlocal import get_localzone
 import hashlib
 import re
 import readchar
@@ -15,6 +15,8 @@ from datetime import datetime, timezone
 from sys import exit, platform
 from decimal import *
 import koios_python as kp
+
+
 try:
     import pyfiglet
 except:
@@ -29,16 +31,16 @@ def ClearScreen():
     command ='clear'
     system(command)
 
-### Set your onw timezone -----------------------------------------###
-local_tz = pytz.timezone('Europe/Madrid')
 
-### Set These Variables ###
+### Set These Variables -------------------------------------------###
 pool_ticker = "YOUT_POOL_TICKER"
 vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
-
 ### -------------------------------------------------------------- ###
 
+
+### Get your machine timezone -----------------------------------------###
+local_tz = get_localzone()
 
 ### ADA Unicode symbol and Lovelaces removal ###
 ada = " \u20B3"
