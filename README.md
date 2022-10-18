@@ -1,11 +1,11 @@
 # Cardano Leader Slot
 Scheduled Block Checker for Cardano Stakepool Operators. 
 
-![cardano-leader-slot](https://user-images.githubusercontent.com/82296005/195933862-96568b7d-4378-42a5-90a7-47195051889a.png)
+![leader-slot](https://user-images.githubusercontent.com/82296005/196404189-f0b41e84-2996-4772-ab0e-d1ab80935a5c.png)
 
 
 Lightweight and Portable Scheduled Blocks Checker for Next, Current and Previous Epochs.
-No cardano-node required, just your VRF Key file. All data is taken from [Koios API](https://www.koios.rest/) and [adamantium.online](https://adamantium.online/)
+No cardano-cli required, just your VRF Key file. All data is taken from [Koios API](https://www.koios.rest/) and [Armada Alliance](https://armada-alliance.com/)
 
 Note: This is a reworking of old python script ScheduledBlocks.py 
 available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos version: https://github.com/asnakep/ScheduledBlocks and using Ouroboros Praos updated code from https://github.com/dostrelith678/cardano-leader-logs
@@ -26,7 +26,7 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 
 ~~~
 ### Set your onw timezone -----------------------------------------###
-local_tz = pytz.timezone('Europe/Berlin')
+local_tz = pytz.timezone('Europe/Madrid')
 
 ### Set These Variables ###
 pool_ticker = "YOUR_POOL_TICKER"
