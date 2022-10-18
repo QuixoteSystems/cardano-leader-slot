@@ -29,7 +29,7 @@ def ClearScreen():
     system(command)
 
 ### Set your onw timezone -----------------------------------------###
-local_tz = pytz.timezone('Europe/Berlin')
+local_tz = pytz.timezone('Europe/Madrid')
 
 ### Set These Variables ###
 pool_ticker = "YOUT_POOL_TICKER"
@@ -43,12 +43,19 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 ada = " \u20B3"
 lovelaces = 1000000
 
-### Get Epoch Info from Adamantium Site (Star Forge Pool [OTG]) ###
-otg_headers ={'content-type': 'application/json'}
+### Get Epoch Info from Armada Alliance Site (https://armada-alliance.com/) ###
+armada_headers ={'content-type': 'application/json'}
 
-### Get Next Epoch Nonce from Adamantium Site (Star Forge Pool [OTG]) ###
+### Get Next Epoch Nonce from Armada Alliance Site (Star Forge Pool [OTG]) ###
 try:
-    next_epoch_parameters = requests.get("https://nonce.adamantium.online/next.json", headers=otg_headers)
+    # Current Epoch
+    epoch_param = kp.get_tip()
+    epoch = epoch_param[0]["epoch_no"]
+    net_stake_param = kp.get_epoch_params(epoch)
+    eta0 =  net_stake_param[0]["nonce"]
+
+    # Current Epoch
+    next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
     json_data = next_epoch_parameters.json()
     next_epoch = next_epoch_parameters.json().get("epoch")
     next_eta0 = next_epoch_parameters.json().get("nonce")
@@ -56,11 +63,15 @@ try:
     ErrorMsg = "Query returned no rows"
     if ErrorMsg in next_eta0 :
         msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
+        
     if ErrorMsg not in next_eta0 :
         msg = str(col.green + f'(Next Epoch Nonce Available)')
 
+    if eta0 == next_eta0:
+        msg = str(col.green + f'(Next Epoch Not Nonce Yet)')
+
 except OSError as ErrorMsg:
-    msg = str(col.red + f'(Failed to establish connection to nonce.adamantium.online)')
+    msg = str(col.red + f'(Failed to establish connection to nonce.armada-alliance.com)')
 
 
 ### User Prompt Menu to select what kind of Epochs you want to know
@@ -333,7 +344,7 @@ def get_performance(n_stake, p_stake):
 # @param pool_vrf_skey The vrf signing key for the pool
 
 ### For Epochs inside Praos Time ###
-if float(epoch) >= 364:
+if float(epoch) >= 365:
     def is_slot_leader(slot, activeSlotsCoeff, sigma, eta0, pool_vrf_skey):
         seed = mk_seed(slot, eta0)
         praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
@@ -395,7 +406,7 @@ else:
             libsodium.crypto_vrf_proof_to_hash(proofHash,proof)
             return proofHash.raw
         else:
-            print("error.  Feed me bytes")
+            print("Error.  Feed me bytes")
             exit()
 
     # Determine if our pool is a slot leader for this given slot
@@ -423,7 +434,7 @@ else:
             pass
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
             slotcount+=1
-            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%Y-%m-%d %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
+            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
     print()
     print("Total Scheduled Blocks: " + str(slotcount))
 
