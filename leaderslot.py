@@ -63,12 +63,12 @@ try:
     ErrorMsg = "Query returned no rows"
     if ErrorMsg in next_eta0 :
         msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
-        
+
     if ErrorMsg not in next_eta0 :
         msg = str(col.green + f'(Next Epoch Nonce Available)')
 
     if eta0 == next_eta0:
-        msg = str(col.green + f'(Next Epoch Not Nonce Yet)')
+        msg = str(col.red + f'(Next Epoch Not Nonce Yet)')
 
 except OSError as ErrorMsg:
     msg = str(col.red + f'(Failed to establish connection to nonce.armada-alliance.com)')
