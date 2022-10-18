@@ -13,6 +13,7 @@ from ctypes import *
 from os import system, path
 from datetime import datetime, timezone
 from sys import exit, platform
+from decimal import *
 import koios_python as kp
 try:
     import pyfiglet
@@ -247,7 +248,6 @@ firstSlot = firstShelleySlot[0]["abs_slot"]
 ### Calculate first slot of target Epoch ###
 firstSlotOfEpoch = (firstSlot) + (epoch - 211) * (epochLength)
 
-from decimal import *
 getcontext().prec = 9
 getcontext().rounding = ROUND_HALF_UP
 
@@ -292,7 +292,7 @@ def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
 
 ### Epoch Assigned Performance or Luck ###
 def get_performance(n_stake, p_stake):
-    blocksEpoch = 21600
+    blocks_epoch = 21600
 
     n_stake = n_stake.replace(',','')
     p_stake = p_stake.replace(',','')
@@ -303,13 +303,13 @@ def get_performance(n_stake, p_stake):
     n_stake = math.trunc(n_stake)
     p_stake = math.trunc(p_stake)
 
-    epoch_luck = int(100 * slotcount) / (blocksEpoch * p_stake / n_stake)
+    epoch_luck = int(100 * slot_count) / (blocks_epoch * p_stake / n_stake)
 
     print()
     print(f'  Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
 
 
-    if slotcount == 0:
+    if slot_count == 0:
         print()
         print("  No SlotLeader Schedules Found for Epoch: " +str(epoch))
         exit
@@ -321,7 +321,7 @@ def get_blocks(slot_count):
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
             slot_count+=1
 
-            print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
+            print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slot_count)))
     return slot_count
 
 
@@ -412,13 +412,13 @@ else:
         c = math.log(1.0 - activeSlotCoeff)
         sigmaOfF = math.exp(-sigma * c)
         return q <= sigmaOfF
-    slotcount=0
+    slot_count=0
     for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
         slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
-        slotcount = get_blocks(slotcount)
+        slot_count = get_blocks(slot_count)
 
     print()
-    print("  Total Scheduled Blocks: " + str(slotcount))
+    print("  Total Scheduled Blocks: " + str(slot_count))
 
     get_performance(n_stake, p_stake)
 
