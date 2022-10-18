@@ -80,36 +80,36 @@ print()
 
 ### Figlet Fancy Welcome Header
 try:
-    cardano = pyfiglet.figlet_format("Cardano")
-    leader_slot = pyfiglet.figlet_format("Leader Slot")
+    cardano = pyfiglet.figlet_format("  Cardano")
+    leader_slot = pyfiglet.figlet_format("  Leader Slot")
 
     print(col.green + cardano)
     print(col.green + leader_slot)
 except:
     pass
 
-print(col.green + f'Welcome to Light Leader Slot Script for Cardano SPOs. ')
+print(col.green + f'  Welcome to Light Leader Slot Script for Cardano SPOs. ')
 print()
-print(col.green + f'Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
+print(col.green + f'  Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
 print(col.endcl)
 #print(col.green + f'Current Epoch: ' + col.endcl +str(current_epoch))
 
 
 print(col.endcl)
-print(f'(n) to Check Next Epoch Schedules ' +str(msg))
+print(f'  (n) to Check Next Epoch Schedules ' +str(msg))
 print(col.endcl)
-print(f'(c) to Check Current Epoch')
+print(f'  (c) to Check Current Epoch')
 print(col.endcl)
-print(f'(p) to Check Previous Epochs')
+print(f'  (p) to Check Previous Epochs')
 print(col.endcl)
 
-print(f'(any key) to Exit')
+print(f'  (any key) to Exit')
 print(col.endcl)
 
 ### Read Keyboard keys ###
 key = readchar.readkey()
 
-def get_epoch_menu():
+def print_epoch_menu()():
     print()
     print(f'  Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
@@ -123,8 +123,9 @@ def get_epoch_menu():
     print()
     print(f'  Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
     print()
-### NEXT EPOCH. Get data from Koios & OTG Pool ###
 
+    
+### NEXT EPOCH. Get data from Koios & OTG Pool ###
 if key == 'n':
 
     ClearScreen()
@@ -145,19 +146,7 @@ if key == 'n':
 
     sigma = float(p_stake) / float(n_stake)
 
-    print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
-    print()
-    print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
-    print()
-    print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
-    print()
-    print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
-    print()
-    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
-    print()
-    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
-    print()
+    print_epoch_menu()
 
 ### CURRENT PREVIUOS. Get data from Koios ###
 
@@ -183,19 +172,7 @@ if key == 'p':
     sigma = float(p_stake) / float(n_stake)
 
 
-    print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
-    print()
-    print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
-    print()
-    print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
-    print()
-    print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
-    print()
-    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
-    print()
-    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
-    print()
+    print_epoch_menu()
 
 
 ### CURRENT EPOCH. Get data from Koios ###
@@ -219,7 +196,7 @@ if key == 'c':
     sigma = float(p_stake) / float(n_stake)
 
 
-    get_epoch_menu()
+    print_epoch_menu()
 
 
 ### ############### ###
@@ -291,7 +268,7 @@ def vrf_eval_certified(seed, praosCanBeLeaderSignKeyVRF):
 
         return proof_hash.raw
     else:
-        print("Error.  Feed me bytes")
+        print("  Error.  Feed me bytes")
         exit()
 
 
@@ -329,12 +306,12 @@ def get_performance(n_stake, p_stake):
     epoch_luck = int(100 * slotcount) / (blocksEpoch * p_stake / n_stake)
 
     print()
-    print(f'Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
+    print(f'  Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
 
 
     if slotcount == 0:
         print()
-        print("No SlotLeader Schedules Found for Epoch: " +str(epoch))
+        print("  No SlotLeader Schedules Found for Epoch: " +str(epoch))
         exit
 
 
@@ -344,7 +321,7 @@ def print_blocks(slotcount):
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
             slotcount+=1
 
-            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-% %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
+            print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
 # Determine if our pool is a slot leader for this given slot
 # @param slot The slot to check
 # @param activeSlotsCoeff The activeSlotsCoeff value from protocol params
@@ -434,11 +411,8 @@ else:
     slotcount=0
     for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
         slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
-        if slotLeader:
-            pass
-            timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
-            slotcount+=1
-            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
+        print_blocks(slotcount)
+
     print()
     print("Total Scheduled Blocks: " + str(slotcount))
 
