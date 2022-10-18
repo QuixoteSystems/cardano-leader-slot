@@ -27,9 +27,11 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 ~~~
 
 ### Set These Variables -------------------------------------------###
+
 pool_ticker = "YOUT_POOL_TICKER"
 vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
+
 ### -------------------------------------------------------------- ###
 ~~~
 
