@@ -315,14 +315,14 @@ def get_performance(n_stake, p_stake):
         exit
 
 
-def print_blocks(slotcount):
+def get_blocks(slot_count):
     if slotLeader:
             pass
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
-            slotcount+=1
+            slot_count+=1
 
             print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
-    return slotcount
+    return slot_count
 
 
 # Determine if our pool is a slot leader for this given slot
@@ -347,7 +347,7 @@ if float(epoch) >= 365:
 
         return q <= sigmaOfF
 
-    slotcount=0
+    slot_count=0
 
     for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
 
@@ -363,14 +363,15 @@ if float(epoch) >= 365:
         c = math.log(1.0 - activeSlotCoeff)
         sigmaOfF = math.exp(-sigma * c)
 
-        slotcount = print_blocks(slotcount)
+        slot_count = get_blocks(slot_count)
+
     print()
-    print("Total Scheduled Blocks: " + str(slotcount))
+    print("  Total Scheduled Blocks: " + str(slot_count))
 
     get_performance(n_stake, p_stake)
 
 
-### For old Epochs inside TPraos Time (before Current Ouroboros Praos) ###
+### For OLD Epochs inside TPraos Time (before Current Ouroboros Praos) ###
 else:
     def mkSeed(slot, eta0):
         h = hashlib.blake2b(digest_size=32)
@@ -414,10 +415,10 @@ else:
     slotcount=0
     for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
         slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
-        print_blocks(slotcount)
+        slotcount = get_blocks(slotcount)
 
     print()
-    print("Total Scheduled Blocks: " + str(slotcount))
+    print("  Total Scheduled Blocks: " + str(slotcount))
 
     get_performance(n_stake, p_stake)
 
