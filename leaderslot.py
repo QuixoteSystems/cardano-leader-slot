@@ -109,7 +109,20 @@ print(col.endcl)
 ### Read Keyboard keys ###
 key = readchar.readkey()
 
-
+def get_epoch_menu():
+    print()
+    print(f'  Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+    print()
+    print(f'  Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
+    print()
+    print(f'  Epoch: ' + col.green + str(epoch) + col.endcl)
+    print()
+    print(f'  Nonce: ' + col.green + str(eta0) + col.endcl)
+    print()
+    print(f'  Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
+    print()
+    print(f'  Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
+    print()
 ### NEXT EPOCH. Get data from Koios & OTG Pool ###
 
 if key == 'n':
@@ -206,19 +219,7 @@ if key == 'c':
     sigma = float(p_stake) / float(n_stake)
 
 
-    print()
-    print(f'Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
-    print()
-    print(f'Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
-    print()
-    print(f'Epoch: ' + col.green + str(epoch) + col.endcl)
-    print()
-    print(f'Nonce: ' + col.green + str(eta0) + col.endcl)
-    print()
-    print(f'Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
-    print()
-    print(f'Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
-    print()
+    get_epoch_menu()
 
 
 ### ############### ###
@@ -337,7 +338,7 @@ def get_performance(n_stake, p_stake):
         exit
 
 
-def print_blocks():
+def print_blocks(slotcount):
     if slotLeader:
             pass
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
@@ -382,7 +383,7 @@ if float(epoch) >= 365:
         c = math.log(1.0 - activeSlotCoeff)
         sigmaOfF = math.exp(-sigma * c)
 
-        print_blocks()
+        print_blocks(slotcount)
     print()
     print("Total Scheduled Blocks: " + str(slotcount))
 
