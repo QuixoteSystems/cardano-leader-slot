@@ -322,6 +322,9 @@ def print_blocks(slotcount):
             slotcount+=1
 
             print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
+    return slotcount
+
+
 # Determine if our pool is a slot leader for this given slot
 # @param slot The slot to check
 # @param activeSlotsCoeff The activeSlotsCoeff value from protocol params
@@ -360,7 +363,7 @@ if float(epoch) >= 365:
         c = math.log(1.0 - activeSlotCoeff)
         sigmaOfF = math.exp(-sigma * c)
 
-        print_blocks(slotcount)
+        slotcount = print_blocks(slotcount)
     print()
     print("Total Scheduled Blocks: " + str(slotcount))
 
