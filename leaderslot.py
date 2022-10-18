@@ -109,7 +109,7 @@ print(col.endcl)
 ### Read Keyboard keys ###
 key = readchar.readkey()
 
-def print_epoch_menu()():
+def print_epoch_menu():
     print()
     print(f'  Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
@@ -124,7 +124,7 @@ def print_epoch_menu()():
     print(f'  Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
     print()
 
-    
+
 ### NEXT EPOCH. Get data from Koios & OTG Pool ###
 if key == 'n':
 
