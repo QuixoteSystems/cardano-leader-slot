@@ -337,18 +337,13 @@ def get_performance(n_stake, p_stake):
         exit
 
 
-def get_total_blocks():
-    slotcount=0
-    for slot in range(firstSlotOfEpoch,epochLength+firstSlotOfEpoch):
-        slotLeader = isSlotLeader(slot, activeSlotCoeff, sigma, eta0, pool_vrf_skey)
-        if slotLeader:
+def print_blocks():
+    if slotLeader:
             pass
             timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
             slotcount+=1
-            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
-    print()
-    print("Total Scheduled Blocks: " + str(slotcount))
 
+            print("Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-% %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slotcount)))
 # Determine if our pool is a slot leader for this given slot
 # @param slot The slot to check
 # @param activeSlotsCoeff The activeSlotsCoeff value from protocol params
@@ -387,7 +382,9 @@ if float(epoch) >= 365:
         c = math.log(1.0 - activeSlotCoeff)
         sigmaOfF = math.exp(-sigma * c)
 
-    get_total_blocks()
+        print_blocks()
+    print()
+    print("Total Scheduled Blocks: " + str(slotcount))
 
     get_performance(n_stake, p_stake)
 
