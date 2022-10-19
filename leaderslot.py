@@ -67,16 +67,16 @@ try:
 
     ErrorMsg = "Query returned no rows"
     if ErrorMsg in next_eta0 :
-        msg = str(col.red + f'(New Nonce Not Avaliable Yet)')
+        msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
     if ErrorMsg not in next_eta0 :
-        msg = str(col.green + f'(Next Epoch Nonce Available)')
+        msg = str(col.green + '(Next Epoch Nonce Available)')
 
     if eta0 == next_eta0:
-        msg = str(col.red + f'(Next Epoch Not Nonce Yet)')
+        msg = str(col.red + '(Next Epoch Not Nonce Yet)')
 
 except OSError as ErrorMsg:
-    msg = str(col.red + f'(Failed to establish connection to nonce.armada-alliance.com)')
+    msg = str(col.red + '(Failed to establish connection to nonce.armada-alliance.com)')
 
 
 ### User Prompt Menu to select what kind of Epochs you want to know
@@ -93,19 +93,19 @@ try:
 except:
     pass
 
-print(col.green + f'  Welcome to Light Leader Slot Script for Cardano SPOs. ')
+print(col.green + '  Welcome to Light Leader Slot Script for Cardano SPOs. ')
 print()
-print(col.green + f'  Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
+print(col.green + '  Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
 print(col.endcl)
 #print(col.green + f'Current Epoch: ' + col.endcl +str(current_epoch))
 
 
 print(col.endcl)
-print(f'  Press (n) to Check Next Epoch ' +str(msg))
+print(f'  Press (n) to Check Next Epoch {str(msg)}')
 print(col.endcl)
-print(f'  Press (c) to Check Current Epoch')
+print('  Press (c) to Check Current Epoch')
 print(col.endcl)
-print(f'  Press (p) to Check Previous Epoch')
+print('  Press (p) to Check Previous Epoch')
 print(col.endcl)
 
 print(f'  (any key) to Exit')
@@ -115,18 +115,21 @@ print(col.endcl)
 key = readchar.readkey()
 
 def print_epoch_menu():
+    '''
+    Print Menu to show Pool and Epoch data
+    '''
     print()
-    print(f'  Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+    print('  Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
     print()
-    print(f'  Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
+    print('  Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
     print()
-    print(f'  Epoch: ' + col.green + str(epoch) + col.endcl)
+    print('  Epoch: ' + col.green + str(epoch) + col.endcl)
     print()
-    print(f'  Nonce: ' + col.green + str(eta0) + col.endcl)
+    print('  Nonce: ' + col.green + str(eta0) + col.endcl)
     print()
-    print(f'  Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
+    print('  Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
     print()
-    print(f'  Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
+    print('  Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
     print()
 
 
@@ -176,7 +179,6 @@ if key == 'p':
 
     sigma = float(p_stake) / float(n_stake)
 
-
     print_epoch_menu()
 
 
@@ -199,7 +201,6 @@ if key == 'c':
     p_stake = pool_stake_param[0]["active_stake"]
 
     sigma = float(p_stake) / float(n_stake)
-
 
     print_epoch_menu()
 
