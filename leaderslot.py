@@ -294,6 +294,9 @@ def isOverlaySlot(firstSlotOfEpoch, currentSlot, decentralizationParam):
 
 ### Epoch Assigned Performance or Luck ###
 def get_performance(n_stake, p_stake):
+    '''
+    Calculate and print the Epoch performance
+    '''
     blocks_epoch = 21600
 
     n_stake = n_stake.replace(',','')
@@ -314,16 +317,18 @@ def get_performance(n_stake, p_stake):
     if slot_count == 0:
         print()
         print("  No SlotLeader Schedules Found for Epoch: " +str(epoch))
+        print()
         exit
 
 
 def get_blocks(slot_count):
+    '''
+    Count and print Blocks Epoch output
+    '''
     if slotLeader:
-            pass
-            timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
-            slot_count+=1
-
-            print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slot_count)))
+        timestamp = datetime.fromtimestamp(slot + 1591566291, tz=local_tz)
+        slot_count+=1
+        print("  Epoch: " + str(epoch) + " - Local Time: " + str(timestamp.strftime('%d-%m-%Y %H:%M:%S') + " - Slot: " + str(slot-firstSlotOfEpoch) + "  - Block: " + str(slot_count)))
     return slot_count
 
 
@@ -337,6 +342,9 @@ def get_blocks(slot_count):
 ### For Epochs inside Praos Time ###
 if float(epoch) >= 365:
     def is_slot_leader(slot, activeSlotsCoeff, sigma, eta0, pool_vrf_skey):
+        '''
+        Check and calculate if Pool is leader in a certain slot
+        '''
         seed = mk_seed(slot, eta0)
         praosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
         cert = vrf_eval_certified(seed, praosCanBeLeaderSignKeyVRFb)
@@ -404,6 +412,9 @@ else:
     # @param pool_vrf_skey The vrf signing key for the pool
 
     def isSlotLeader(slot,activeSlotCoeff,sigma,eta0,pool_vrf_skey):
+        '''
+        Check and calculate if Pool is leader in a certain slot
+        '''
         seed = mkSeed(slot, eta0)
         tpraosCanBeLeaderSignKeyVRFb = binascii.unhexlify(pool_vrf_skey)
         cert=vrfEvalCertified(seed,tpraosCanBeLeaderSignKeyVRFb)
