@@ -43,3 +43,8 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ## Output: 
 - a *console output* with all the slots assigned for next, current and previous Epochs
+
+Output Example of a Previous Epoch:
+
+![360](https://user-images.githubusercontent.com/82296005/196671094-733b586b-b3f8-4487-89ac-1745d41495a6.png)
+
