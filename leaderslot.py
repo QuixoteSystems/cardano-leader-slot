@@ -33,9 +33,11 @@ def ClearScreen():
 
 
 ### Set These Variables -------------------------------------------###
+
 pool_ticker = "YOUT_POOL_TICKER"
 vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
+
 ### -------------------------------------------------------------- ###
 
 
@@ -99,11 +101,11 @@ print(col.endcl)
 
 
 print(col.endcl)
-print(f'  (n) to Check Next Epoch Schedules ' +str(msg))
+print(f'  Press (n) to Check Next Epoch ' +str(msg))
 print(col.endcl)
-print(f'  (c) to Check Current Epoch')
+print(f'  Press (c) to Check Current Epoch')
 print(col.endcl)
-print(f'  (p) to Check Previous Epochs')
+print(f'  Press (p) to Check Previous Epoch')
 print(col.endcl)
 
 print(f'  (any key) to Exit')
