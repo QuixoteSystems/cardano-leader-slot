@@ -162,7 +162,7 @@ if key == 'p':
 
     ClearScreen()
     print()
-    epoch = input("Enter Epoch Previous Number: " + col.green)
+    epoch = input("  Enter Epoch Previous Number: " + col.green)
     print(col.endcl)
 
     epoch_param = kp.get_epoch_info(epoch)
@@ -233,7 +233,7 @@ elif platform == "darwin":
     elif path.exists(systemLibsodiumPath):
         libsodium = cdll.LoadLibrary(systemLibsodiumPath)
     else:
-        exit(f'Unable to find libsodium, checked the following paths: {", ".join([daedalusLibsodiumPath, systemLibsodiumPath])}')
+        exit(f' Unable to find libsodium, checked the following paths: {", ".join([daedalusLibsodiumPath, systemLibsodiumPath])}')
 libsodium.sodium_init()
 ################################################## ###
 
@@ -315,7 +315,7 @@ def get_performance(n_stake, p_stake):
 
     print()
     print(f'  Assigned Epoch Performance: ' + str(format(epoch_luck, ".2f")) + ' %' )
-
+    print()
 
     if slot_count == 0:
         print()
