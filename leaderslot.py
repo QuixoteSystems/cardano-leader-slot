@@ -26,7 +26,7 @@ except:
 pool_ticker = "YOUT_POOL_TICKER"
 vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
-
+pool_id_bech32 = "pool1x5dfpgp987e4jhxvgczr3wv50nv2pwd873tlx3uthvcasm422q6"
 ### -------------------------------------------------------------- ###
  
 class col:
@@ -57,17 +57,19 @@ try:
     eta0 =  net_stake_param[0]["nonce"]
 
     # Next Epoch
+    next_epoch_parameters = kp.get_pool_stake_snapshot(pool_id_bech32)
+  #  next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
+    #json_data = next_epoch_parameters.json()
+    print(next_epoch_parameters)
+    #next_eta0 = next_epoch_parameters.json().get("nonce")
+    next_epoch = next_epoch_parameters[2]["epoch_no"]
+    next_eta0 = next_epoch_parameters[2]["nonce"]
 
-    next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
-    json_data = next_epoch_parameters.json()
-    next_epoch = next_epoch_parameters.json().get("epoch")
-    next_eta0 = next_epoch_parameters.json().get("nonce")
-
-    ErrorMsg = "null"
-    if ErrorMsg in next_eta0 :
+    ErrorMsg = None
+    if next_eta0 is None :
         msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
-    if ErrorMsg not in next_eta0 :
+    if next_eta0 is not None :
         msg = str(col.green + '(Next Epoch Nonce Available)')
 
     if eta0 == next_eta0:
