@@ -16,20 +16,10 @@ from sys import exit, platform
 from decimal import *
 import koios_python as kp
 
-
 try:
     import pyfiglet
 except:
     pass
-
-class col:
-    red = '\033[31m'
-    green = '\033[92m'
-    endcl = '\033[0m'
-
-def ClearScreen():
-    command ='clear'
-    system(command)
 
 
 ### Set These Variables -------------------------------------------###
@@ -40,6 +30,15 @@ pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ### -------------------------------------------------------------- ###
 
+ 
+class col:
+    red = '\033[31m'
+    green = '\033[92m'
+    endcl = '\033[0m'
+
+def ClearScreen():
+    command ='clear'
+    system(command)
 
 ### Get your machine timezone -----------------------------------------###
 local_tz = get_localzone()
@@ -59,11 +58,14 @@ try:
     net_stake_param = kp.get_epoch_params(epoch)
     eta0 =  net_stake_param[0]["nonce"]
 
-    # Current Epoch
-    next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
-    json_data = next_epoch_parameters.json()
-    next_epoch = next_epoch_parameters.json().get("epoch")
-    next_eta0 = next_epoch_parameters.json().get("nonce")
+    # Next Epoch
+    try:
+        next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
+        json_data = next_epoch_parameters.json()
+        next_epoch = next_epoch_parameters.json().get("epoch")
+        next_eta0 = next_epoch_parameters.json().get("nonce")
+    except:
+        msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
     ErrorMsg = "Query returned no rows"
     if ErrorMsg in next_eta0 :
