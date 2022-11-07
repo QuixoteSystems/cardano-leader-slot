@@ -254,6 +254,11 @@ getcontext().prec = 9
 getcontext().rounding = ROUND_HALF_UP
 
 def mk_seed(slot, eta0):
+
+    if eta0 == None:
+        print(str(col.red + 'New Nonce Not Avaliable Yet. It can not check assigned blocks for Next Epoch'))
+        exit()
+
     h = hashlib.blake2b(digest_size=32)
     h.update(slot.to_bytes(8, byteorder='big') + binascii.unhexlify(eta0))
     slotToSeedBytes = h.digest()
