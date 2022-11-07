@@ -257,6 +257,7 @@ def mk_seed(slot, eta0):
 
     if eta0 == None:
         print(str(col.red + 'New Nonce Not Avaliable Yet. It can not check assigned blocks for Next Epoch'))
+        print()
         exit()
 
     h = hashlib.blake2b(digest_size=32)
