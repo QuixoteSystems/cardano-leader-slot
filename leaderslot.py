@@ -46,7 +46,7 @@ ada = " \u20B3"
 lovelaces = 1000000
 
 
-### Get Next Epoch Nonce from Armada Alliance Site (Star Forge Pool [OTG]) ###
+### Get Next Epoch Nonce from Koios ###
 try:
     # Current Epoch
     epoch_param = kp.get_tip()
@@ -60,6 +60,7 @@ try:
     next_eta0 = next_epoch_parameters[2]["nonce"]
 
     ErrorMsg = None
+    
     if next_eta0 is None :
         msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
