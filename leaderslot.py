@@ -21,7 +21,6 @@ try:
 except:
     pass
 
-
 ### Set These Variables -------------------------------------------###
 
 pool_ticker = "YOUT_POOL_TICKER"
@@ -29,7 +28,6 @@ vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ### -------------------------------------------------------------- ###
-
  
 class col:
     red = '\033[31m'
@@ -59,15 +57,13 @@ try:
     eta0 =  net_stake_param[0]["nonce"]
 
     # Next Epoch
-    try:
-        next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
-        json_data = next_epoch_parameters.json()
-        next_epoch = next_epoch_parameters.json().get("epoch")
-        next_eta0 = next_epoch_parameters.json().get("nonce")
-    except:
-        msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
-    ErrorMsg = "Query returned no rows"
+    next_epoch_parameters = requests.get("https://nonce.armada-alliance.com/next.json", headers=armada_headers)
+    json_data = next_epoch_parameters.json()
+    next_epoch = next_epoch_parameters.json().get("epoch")
+    next_eta0 = next_epoch_parameters.json().get("nonce")
+
+    ErrorMsg = "null"
     if ErrorMsg in next_eta0 :
         msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
