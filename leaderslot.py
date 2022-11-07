@@ -45,8 +45,6 @@ local_tz = get_localzone()
 ada = " \u20B3"
 lovelaces = 1000000
 
-### Get Epoch Info from Armada Alliance Site (https://armada-alliance.com/) ###
-armada_headers ={'content-type': 'application/json'}
 
 ### Get Next Epoch Nonce from Armada Alliance Site (Star Forge Pool [OTG]) ###
 try:
