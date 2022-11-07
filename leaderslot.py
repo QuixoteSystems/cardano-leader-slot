@@ -133,7 +133,7 @@ if key == 'n':
     ClearScreen()
 
     epoch_parameters = kp.get_pool_stake_snapshot(pool_id_bech32)
-    next_epoch = epoch_parameters[2]["epoch_no"]
+    epoch = epoch_parameters[2]["epoch_no"]
     next_eta0 = epoch_parameters[2]["nonce"]
     current_epoch = epoch_parameters[1]["epoch_no"]
     # Old parameters from Armada
