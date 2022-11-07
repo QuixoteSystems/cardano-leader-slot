@@ -23,7 +23,7 @@ except:
 
 ### Set These Variables -------------------------------------------###
 
-pool_ticker = "YOUT_POOL_TICKER"
+pool_ticker = "YOUR_POOL_TICKER"
 vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
@@ -60,7 +60,7 @@ try:
     next_eta0 = next_epoch_parameters[2]["nonce"]
 
     ErrorMsg = None
-    
+
     if next_eta0 is None :
         msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
@@ -93,7 +93,6 @@ print()
 print(col.green + '  Check Assigned Blocks in Next, Current and Previous Cardano Epochs.')
 print(col.endcl)
 #print(col.green + f'Current Epoch: ' + col.endcl +str(current_epoch))
-
 
 print(col.endcl)
 print(f'  Press (n) to Check Next Epoch {str(msg)}')
@@ -128,31 +127,36 @@ def print_epoch_menu():
     print()
 
 
-### NEXT EPOCH. Get data from Koios & OTG Pool ###
+### NEXT EPOCH. Get data from Koios ###
 if key == 'n':
 
     ClearScreen()
 
-    epoch_parameters = kp.get_tip()
-    epoch = epoch_parameters[0]["epoch_no"]
-    epoch = int(next_epoch)
-    current_epoch = epoch - 1
+    epoch_parameters = kp.get_pool_stake_snapshot(pool_id_bech32)
+    next_epoch = epoch_parameters[2]["epoch_no"]
+    next_eta0 = epoch_parameters[2]["nonce"]
+    current_epoch = epoch_parameters[1]["epoch_no"]
+    # Old parameters from Armada
+    #epoch_parameters = kp.get_tip()
+    #epoch = epoch_parameters[0]["epoch_no"]
+    #epoch = int(next_epoch)
+    #current_epoch = epoch - 1
 
     netStakeParam = kp.get_epoch_params(current_epoch)
-    #eta0 =  netStakeParam[0]["nonce"]
     eta0= next_eta0
     epoch_info = kp.get_epoch_info(current_epoch)
     n_stake = epoch_info[0]["active_stake"]
 
     poolStakeParam = kp.get_pool_info(pool_id_bech32)
-    p_stake = poolStakeParam[0]["active_stake"]
+    p_stake = next_epoch_parameters[2]["active_stake"]
 
     sigma = float(p_stake) / float(n_stake)
 
     print_epoch_menu()
 
-### CURRENT PREVIUOS. Get data from Koios ###
 
+
+### PREVIUOS EPOCH. Get data from Koios ###
 if key == 'p':
 
     ClearScreen()
@@ -177,8 +181,8 @@ if key == 'p':
     print_epoch_menu()
 
 
-### CURRENT EPOCH. Get data from Koios ###
 
+### CURRENT EPOCH. Get data from Koios ###
 if key == 'c':
 
     ClearScreen()
