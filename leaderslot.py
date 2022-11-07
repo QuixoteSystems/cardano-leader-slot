@@ -142,13 +142,11 @@ if key == 'n':
     #epoch = int(next_epoch)
     #current_epoch = epoch - 1
 
-    netStakeParam = kp.get_epoch_params(current_epoch)
     eta0= next_eta0
-    epoch_info = kp.get_epoch_info(current_epoch)
-    n_stake = epoch_info[0]["active_stake"]
+    n_stake = epoch_parameters[2]["active_stake"]
 
     poolStakeParam = kp.get_pool_info(pool_id_bech32)
-    p_stake = next_epoch_parameters[2]["active_stake"]
+    p_stake = next_epoch_parameters[2]["pool_stake"]
 
     sigma = float(p_stake) / float(n_stake)
 
