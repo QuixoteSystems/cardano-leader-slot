@@ -16,6 +16,28 @@ available on https://github.com/papacarp/pooltool.io.git , Ouroboros TPraos vers
 - pip (Python package installer)
 - libsodium library
 
+### Installing libsodium library
+First of all you need libsodium library installed, If not follow these steps:
+
+
+```shell 
+
+git clone https://github.com/input-output-hk/libsodium.git
+
+cd libsodium
+
+git checkout 1.0.16-519-g66f017f1
+
+./autogen.sh
+
+./configure
+
+make
+
+sudo make install
+
+```
+
 ## Setup:
 
 - Clone this repository using git: ``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
