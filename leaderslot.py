@@ -14,12 +14,15 @@ from os import system, path
 from datetime import datetime, timezone
 from sys import exit, platform
 from decimal import *
-import koios_python as kp
+import koios_python
 
 try:
     import pyfiglet
 except:
     pass
+
+# Create API KOIOS context
+kp = koios_python.URLs()
 
 ### Set These Variables -------------------------------------------###
 
@@ -28,7 +31,7 @@ vrf_key_file = ('YOUR_VRF_FILE_PATH')
 pool_id_bech32 = "YOUR_POOL_ID:_pool1..."
 
 ### -------------------------------------------------------------- ###
- 
+
 class col:
     red = '\033[31m'
     green = '\033[92m'
