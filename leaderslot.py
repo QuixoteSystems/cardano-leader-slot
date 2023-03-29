@@ -115,7 +115,7 @@ def print_epoch_menu():
     '''
     Print Menu to show Pool and Epoch data
     '''
-    print('')
+    print()
     print(f'  Checking SlotLeader Schedules for Stakepool:  {col.green} {pool_ticker} {col.endcl}')
     print()
     print(f'  Pool Id: {col.green} {pool_id_bech32} {col.endcl}')
@@ -187,7 +187,7 @@ if key == 'p':
 if key == 'c':
 
     ClearScreen()
-
+    print('test')
     epoch_param = kp.get_tip()
     epoch = epoch_param[0]["epoch_no"]
 
