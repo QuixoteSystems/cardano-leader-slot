@@ -187,7 +187,7 @@ if key == 'p':
 if key == 'c':
 
     ClearScreen()
-    print('test')
+
     epoch_param = kp.get_tip()
     epoch = epoch_param[0]["epoch_no"]
 
