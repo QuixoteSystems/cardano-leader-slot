@@ -115,18 +115,18 @@ def print_epoch_menu():
     '''
     Print Menu to show Pool and Epoch data
     '''
+    print('')
+    print(f'  Checking SlotLeader Schedules for Stakepool:  {col.green} {pool_ticker} {col.endcl}')
     print()
-    print('  Checking SlotLeader Schedules for Stakepool: ' + (col.green + pool_ticker + col.endcl))
+    print(f'  Pool Id: {col.green} {pool_id_bech32} {col.endcl}')
     print()
-    print('  Pool Id: ' + (col.green + pool_id_bech32 + col.endcl))
+    print(f'  Epoch: {col.green} {str(epoch)} {col.endcl}')
     print()
-    print('  Epoch: ' + col.green + str(epoch) + col.endcl)
+    print(f'  Nonce: {col.green} {str(eta0)} {col.endcl}')
     print()
-    print('  Nonce: ' + col.green + str(eta0) + col.endcl)
+    print(f'  Network Active Stake in Epoch {str(epoch)}: {col.green} {int(n_stake):,} {col.endcl} {ada} {col.endcl}')
     print()
-    print('  Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
-    print()
-    print(f'  Pool Active Stake in Epoch {str(epoch)}: {col.green} {str(p_stake)} {col.endcl} {ada:,} {col.endcl}')
+    print(f'  Pool Active Stake in Epoch {str(epoch)}: {col.green} {int(p_stake):,} {col.endcl} {ada} {col.endcl}')
     print()
 
 
