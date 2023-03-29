@@ -126,7 +126,7 @@ def print_epoch_menu():
     print()
     print('  Network Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(n_stake) + col.endcl + ada + col.endcl)
     print()
-    print('  Pool Active Stake in Epoch ' + str(epoch) + ": " + col.green + str(p_stake) + col.endcl + ada + col.endcl)
+    print(f'  Pool Active Stake in Epoch {str(epoch)}: {col.green} {str(p_stake)} {col.endcl} {ada:,} {col.endcl}')
     print()
 
 
