@@ -46,7 +46,7 @@ sudo make install
 git pull
 ```
 
-- Make sure that you have the last version of Koios Python [https://github.com/cardano-community/koios-python] running:
+- Make sure that you have the last version of [Koios Python](https://github.com/cardano-community/koios-python) installed:
 ```
 pip install koios-python -U
 ```
@@ -54,10 +54,15 @@ pip install koios-python -U
 ## Setup:
 
 - Clone this repository using git: 
-``` git clone https://github.com/QuixoteSystems/cardano-leader-slot.git ```
+``` 
+git clone https://github.com/QuixoteSystems/cardano-leader-slot.git 
+```
 
 - Execute inside the newly cloned directory: 
-```pip install -r pip_requirements.txt ```  to install all needed python package requirements
+```
+pip install -r pip_requirements.txt 
+```  
+to install all needed python package requirements
 
 - Make sure you can access your vrf.skey file (you can copy in it a path of your choice) and remember to keep it as read only ``` chmod 400 vrf.skey ```
 
