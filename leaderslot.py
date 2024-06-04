@@ -76,6 +76,8 @@ try:
 except OSError as ErrorMsg:
     msg = str(col.red + '(Failed to establish connection to nonce.armada-alliance.com)')
 
+except IndexError as ErrorMsg:
+    msg = str(col.red + '(New Nonce Not Avaliable Yet)')
 
 ### User Prompt Menu to select what kind of Epochs you want to know
 print()
